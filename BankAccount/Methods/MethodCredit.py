@@ -1,5 +1,5 @@
 import sqlite3
-
+from datetime import datetime
 
 class MethodCredit:
 
@@ -21,11 +21,15 @@ class MethodCredit:
             if account:
                 print(f"Аккаунт с идентификационным номером {IdentificationAccount} уже существует.")
             else:
-                BIC = request['BIC']
+                Money = request.get('Money', 0)
+                BIC = request.get('BIC', 'DEFAULT')
                 CreditLimit = request['CreditLimit']
-                rank = request['rank']
-                cursor.execute("INSERT INTO credit_accounts VALUES (?, ?, ?, ?)",
-                               (IdentificationAccount, BIC, CreditLimit, rank))
+                Rank = request['Rank']
+                TimeActive = request.get('TimeActive', int(datetime.now().strftime('%s')))
+                LastPayTime = request.get('LastPayTime', int(datetime.now().strftime('%s')))
+                PayTime = request.get('PayTime', 0)
+                cursor.execute("INSERT INTO credit_accounts VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                               (IdentificationAccount, Money, BIC, CreditLimit, Rank, TimeActive, LastPayTime, PayTime))
                 conn.commit()
                 print(f"Счет {IdentificationAccount} успешно открыт.")
 
@@ -77,3 +81,39 @@ class MethodCredit:
                     print(f"Недостаточно средств на счете {IdentificationAccount}.")
             else:
                 print(f"Счет {IdentificationAccount} не найден.")
+
+    class PayCredit:
+        def __call__(self, request, cursor, conn):
+            IdentificationAccount = request['IdentificationAccount']
+            cursor.execute(
+                "SELECT TimeActive,"
+                "LastPayTime,"
+                "PayTime,"
+                "Money FROM credit_accounts WHERE IdentificationAccount = ?",
+                (IdentificationAccount,))
+            account = cursor.fetchone()
+            if account:
+                TimeActive, LastPayTime, PayTime, Balance = account
+                current_time = int(datetime.now().strftime('%s'))
+                if Balance < 0:
+                    if int(current_time) - int(LastPayTime) >= int(PayTime):
+                        Money = request['Money']
+                        BIC = request['BIC']
+                        get_money_request = {
+                            'request': 'GetMoney',
+                            'IdentificationAccount': IdentificationAccount,
+                            'Money': Money
+                        }
+                        MethodCredit.AnalyzeRequest()(get_money_request, cursor, conn)
+                        cursor.execute("UPDATE credit_accounts SET LastPayTime = ? WHERE IdentificationAccount = ?",
+                                       (current_time, IdentificationAccount,))
+                        conn.commit()
+                        print(f"Время последнего зачисления для счета {IdentificationAccount} успешно обновлено.")
+                    else:
+                        print(
+                            f"Баланс счета {IdentificationAccount} отрицательный, но время для начисления пени еще не пришло.")
+                else:
+                    print(f"Баланс счета {IdentificationAccount} положительный, пени не начисляются.")
+            else:
+                print(f"Счет {IdentificationAccount} не найден.")
+
