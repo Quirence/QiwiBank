@@ -32,8 +32,8 @@ class BankAccount:
 
         def create_table(self):
             self.cursor.execute('''CREATE TABLE IF NOT EXISTS debit_accounts
-                                   (identification_account TEXT,
-                                   money REAL,
+                                   (IdentificationAccount TEXT,
+                                   Money REAL,
                                    BIC TEXT)''')
             self.conn.commit()
 
@@ -49,11 +49,15 @@ class BankAccount:
 
         def create_table(self):
             self.cursor.execute('''CREATE TABLE IF NOT EXISTS credit_accounts
-                                   (identification_account TEXT,
-                                   money REAL DEFAULT 0,
+                                   (IdentificationAccount TEXT,
+                                   Money REAL DEFAULT 0,
                                    BIC TEXT,
-                                   credit_limit REAL,
-                                   rank TEXT DEFAULT 'AAA')''')
+                                   CreditLimit REAL,
+                                   Rank TEXT DEFAULT 'AAA',
+                                   TimeActive INTEGER DEFAULT (strftime('%s', 'now')),
+                                   LastPayTime INTEGER DEFAULT (strftime('%s', 'now')),
+                                   PayTime INTEGER,
+                                   TimeClose INTEGER)''')
             self.conn.commit()
 
         def treatment_request(self, request):
@@ -68,26 +72,34 @@ class BankAccount:
 
         def create_table(self):
             self.cursor.execute('''CREATE TABLE IF NOT EXISTS deposit_accounts
-                                   (identification_account TEXT,
-                                   money REAL DEFAULT 0,
+                                   (IdentificationAccount TEXT,
+                                   Money REAL DEFAULT 0,
                                    BIC TEXT,
-                                   status_deposit TEXT DEFAULT 'OFF')''')
+                                   StatusDeposit TEXT DEFAULT 'ON',
+                                   TimeActive INTEGER DEFAULT (strftime('%s', 'now')),
+                                   LastPayTime INTEGER DEFAULT (strftime('%s', 'now')),
+                                   PayTime INTEGER DEFAULT 0,
+                                   TimeClose INTEGER DEFAULT 0)''')
             self.conn.commit()
 
         def treatment_request(self, request):
             self.analyzer(request, self.cursor, self.conn)
 
 
+# Создание экземпляра класса BankAccount
 bank_account = BankAccount()
 
-request1 = {
+# Запрос на открытие депозитного счета
+request = {
     'kind_of_account': 'Deposit',
-    'request': 'GiveMoney',
-    'identification_account': '12345',
-    'money': 50000.0,
+    'request': 'PayDeposit',
+    'IdentificationAccount': '12345',
+    'Money': 50000.0,
     'BIC': 'ABC123',
-    'deposit_status': 'ON'
+    'PayTime': 5,
+    'TimeClose': 10,
+    'StatusDeposit': 'ON'
 }
 
 # Вызов метода process_request с различными запросами
-bank_account.process_request(request1)
+bank_account.process_request(request)

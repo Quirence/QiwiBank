@@ -14,63 +14,62 @@ class MethodDebit:
 
     class OpenAccount:
         def __call__(self, request, cursor, conn):
-            identification_account = request['identification_account']
-            cursor.execute("SELECT * FROM debit_accounts WHERE identification_account = ?",
-                           (identification_account,))
+            IdentificationAccount = request['IdentificationAccount']
+            cursor.execute("SELECT * FROM debit_accounts WHERE IdentificationAccount = ?",
+                           (IdentificationAccount,))
             account = cursor.fetchone()
             if account:
-                print(f"Аккаунт с идентификационным номером {identification_account} уже существует.")
+                print(f"Аккаунт с идентификационным номером {IdentificationAccount} уже существует.")
             else:
-                money = request['money']
                 BIC = request['BIC']
-                cursor.execute("INSERT INTO debit_accounts VALUES (?, ?, ?)",
-                               (identification_account, money, BIC))
+                cursor.execute("INSERT INTO debit_accounts VALUES (?, ?)",
+                               (IdentificationAccount, BIC))
                 conn.commit()
-                print(f"Счет {identification_account} успешно открыт.")
+                print(f"Счет {IdentificationAccount} успешно открыт.")
 
     class CloseAccount:
         def __call__(self, request, cursor, conn):
-            identification_account = request['identification_account']
-            cursor.execute("SELECT * FROM debit_accounts WHERE identification_account = ?",
-                           (identification_account,))
+            IdentificationAccount = request['IdentificationAccount']
+            cursor.execute("SELECT * FROM debit_accounts WHERE IdentificationAccount = ?",
+                           (IdentificationAccount,))
             account = cursor.fetchone()
             if account:
-                cursor.execute("DELETE FROM debit_accounts WHERE identification_account = ?",
-                               (identification_account,))
+                cursor.execute("DELETE FROM debit_accounts WHERE IdentificationAccount = ?",
+                               (IdentificationAccount,))
                 conn.commit()
-                print(f"Счет {identification_account} успешно закрыт.")
+                print(f"Счет {IdentificationAccount} успешно закрыт.")
             else:
-                print(f"Счет {identification_account} не найден.")
+                print(f"Счет {IdentificationAccount} не найден.")
 
     class GetMoney:
         def __call__(self, request, cursor, conn):
-            identification_account = request['identification_account']
-            money = request['money']
-            cursor.execute("SELECT * FROM debit_accounts WHERE identification_account = ?", (identification_account,))
+            IdentificationAccount = request['IdentificationAccount']
+            Money = request['Money']
+            cursor.execute("SELECT * FROM debit_accounts WHERE IdentificationAccount = ?", (IdentificationAccount,))
             account_exists = cursor.fetchone()
             if account_exists:
-                cursor.execute("UPDATE debit_accounts SET money = money + ? WHERE identification_account = ?",
-                               (money, identification_account))
+                cursor.execute("UPDATE debit_accounts SET Money = Money + ? WHERE IdentificationAccount = ?",
+                               (Money, IdentificationAccount))
                 conn.commit()
-                print(f"Сумма {money} успешно зачислена на счет {identification_account}.")
+                print(f"Сумма {Money} успешно зачислена на счет {IdentificationAccount}.")
             else:
-                print(f"Счет {identification_account} не найден.")
+                print(f"Счет {IdentificationAccount} не найден.")
 
     class GiveMoney:
         def __call__(self, request, cursor, conn):
-            identification_account = request['identification_account']
-            money = request['money']
-            cursor.execute("SELECT money FROM debit_accounts WHERE identification_account = ?",
-                           (identification_account,))
+            IdentificationAccount = request['IdentificationAccount']
+            Money = request['Money']
+            cursor.execute("SELECT Money FROM debit_accounts WHERE IdentificationAccount = ?",
+                           (IdentificationAccount,))
             account = cursor.fetchone()
             if account:
-                current_money = account[0]
-                if current_money >= money:
-                    cursor.execute("UPDATE debit_accounts SET money = money - ? WHERE identification_account = ?",
-                                   (money, identification_account))
+                CurrentMoney = account[0]
+                if CurrentMoney >= Money:
+                    cursor.execute("UPDATE debit_accounts SET Money = Money - ? WHERE IdentificationAccount = ?",
+                                   (Money, IdentificationAccount))
                     conn.commit()
-                    print(f"Сумма {money} успешно списана со счета {identification_account}.")
+                    print(f"Сумма {Money} успешно списана со счета {IdentificationAccount}.")
                 else:
-                    print(f"Недостаточно средств на счете {identification_account}.")
+                    print(f"Недостаточно средств на счете {IdentificationAccount}.")
             else:
-                print(f"Счет {identification_account} не найден.")
+                print(f"Счет {IdentificationAccount} не найден.")

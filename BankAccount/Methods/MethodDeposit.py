@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 
 
 class MethodDeposit:
@@ -14,103 +15,153 @@ class MethodDeposit:
 
     class OpenAccount:
         def __call__(self, request, cursor, conn):
-            identification_account = request['identification_account']
-            cursor.execute("SELECT * FROM deposit_accounts WHERE identification_account = ?",
-                           (identification_account,))
+            IdentificationAccount = request['IdentificationAccount']
+            cursor.execute("SELECT * FROM deposit_accounts WHERE IdentificationAccount = ?",
+                           (IdentificationAccount,))
             account = cursor.fetchone()
             if account:
-                print(f"Аккаунт с идентификационным номером {identification_account} уже существует.")
+                print(f"Аккаунт с идентификационным номером {IdentificationAccount} уже существует.")
             else:
-                money = request['money']
                 BIC = request['BIC']
-                deposit_status = request['deposit_status']
-                cursor.execute("INSERT INTO deposit_accounts VALUES (?, ?, ?, ?)",
-                               (identification_account, money, BIC, deposit_status))
+                StatusDeposit = request['StatusDeposit']
+                PayTime = request.get('PayTime', 0)
+                Money = request.get('Money', 0)
+                TimeActive = request.get('TimeActive', int(datetime.now().strftime('%s')))
+                LastPayTime = request.get('LastPayTime', int(datetime.now().strftime('%s')))
+                TimeClose = int(TimeActive) + int(request.get('TimeClose', 0))
+                cursor.execute("INSERT INTO deposit_accounts VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                               (IdentificationAccount, Money, BIC, StatusDeposit, TimeActive, LastPayTime, PayTime, TimeClose))
                 conn.commit()
-                print(f"Счет {identification_account} успешно открыт.")
+                print(f"Счет {IdentificationAccount} успешно открыт.")
 
     class CloseAccount:
         def __call__(self, request, cursor, conn):
-            identification_account = request['identification_account']
-            cursor.execute("SELECT * FROM deposit_accounts WHERE identification_account = ?",
-                           (identification_account,))
+            IdentificationAccount = request['IdentificationAccount']
+            cursor.execute("SELECT * FROM deposit_accounts WHERE IdentificationAccount = ?",
+                           (IdentificationAccount,))
             account = cursor.fetchone()
             if account:
-                cursor.execute("DELETE FROM deposit_accounts WHERE identification_account = ?",
-                               (identification_account,))
+                cursor.execute("DELETE FROM deposit_accounts WHERE IdentificationAccount = ?",
+                               (IdentificationAccount,))
                 conn.commit()
-                print(f"Счет {identification_account} успешно закрыт.")
+                print(f"Счет {IdentificationAccount} успешно закрыт.")
             else:
-                print(f"Счет {identification_account} не найден.")
+                print(f"Счет {IdentificationAccount} не найден.")
 
     class GetMoney:
         def __call__(self, request, cursor, conn):
-            identification_account = request['identification_account']
-            money = request['money']
-            cursor.execute("SELECT * FROM deposit_accounts WHERE identification_account = ?",
-                           (identification_account,))
+            IdentificationAccount = request['IdentificationAccount']
+            Money = request['Money']
+            cursor.execute("SELECT * FROM deposit_accounts WHERE IdentificationAccount = ?",
+                           (IdentificationAccount,))
             account = cursor.fetchone()
             if account:
-                cursor.execute("UPDATE deposit_accounts SET money = money + ? WHERE identification_account = ?",
-                               (money, identification_account))
+                cursor.execute("UPDATE deposit_accounts SET Money = Money + ? WHERE IdentificationAccount = ?",
+                               (Money, IdentificationAccount))
                 conn.commit()
-                print(f"Сумма {money} успешно зачислена на счет {identification_account}.")
+                print(f"Сумма {Money} успешно зачислена на счет {IdentificationAccount}.")
             else:
-                print(f"Счет {identification_account} не найден.")
+                print(f"Счет {IdentificationAccount} не найден.")
 
     class GiveMoney:
         def __call__(self, request, cursor, conn):
-            identification_account = request['identification_account']
-            money = request['money']
-            cursor.execute("SELECT money, status_deposit FROM deposit_accounts WHERE identification_account = ?",
-                           (identification_account,))
+            IdentificationAccount = request['IdentificationAccount']
+            Money = request['Money']
+            cursor.execute("SELECT Money, StatusDeposit FROM deposit_accounts WHERE IdentificationAccount = ?",
+                           (IdentificationAccount,))
             account = cursor.fetchone()
             if account:
-                current_money, status_deposit = account
-                if status_deposit == 'OFF':
-                    if current_money >= money:
-                        cursor.execute("UPDATE deposit_accounts SET money = money - ? WHERE identification_account = ?",
-                                       (money, identification_account))
+                CurrentMoney, StatusDeposit = account
+                if StatusDeposit == 'OFF':
+                    if CurrentMoney >= Money:
+                        cursor.execute("UPDATE deposit_accounts SET Money = Money - ? WHERE IdentificationAccount = ?",
+                                       (Money, IdentificationAccount))
                         conn.commit()
-                        print(f"Сумма {money} успешно списана со счета {identification_account}.")
+                        print(f"Сумма {Money} успешно списана со счета {IdentificationAccount}.")
                     else:
-                        print(f"Недостаточно средств на счете {identification_account}.")
+                        print(f"Недостаточно средств на счете {IdentificationAccount}.")
                 else:
                     print(
-                        f"Списание средств с депозита {identification_account} невозможно, так как статус депозита: {status_deposit}.")
+                        f"Списание средств с депозита {IdentificationAccount} невозможно, так как статус депозита: {StatusDeposit}.")
             else:
-                print(f"Счет {identification_account} не найден.")
+                print(f"Счет {IdentificationAccount} не найден.")
 
     class SetOn:
         def __call__(self, request, cursor, conn):
-            identification_account = request['identification_account']
-            cursor.execute("SELECT status_deposit FROM deposit_accounts WHERE identification_account = ?",
-                           (identification_account,))
+            IdentificationAccount = request['IdentificationAccount']
+            cursor.execute("SELECT StatusDeposit FROM deposit_accounts WHERE IdentificationAccount = ?",
+                           (IdentificationAccount,))
             current_status = cursor.fetchone()
             if current_status and current_status[0] != 'ON':
-                cursor.execute("UPDATE deposit_accounts SET status_deposit = 'ON' WHERE identification_account = ?",
-                               (identification_account,))
+                cursor.execute("UPDATE deposit_accounts SET StatusDeposit = 'ON' WHERE IdentificationAccount = ?",
+                               (IdentificationAccount,))
                 conn.commit()
-                print(f"Статус депозита для счета {identification_account} успешно изменен на 'ON'.")
+                print(f"Статус депозита для счета {IdentificationAccount} успешно изменен на 'ON'.")
             elif current_status and current_status[0] == 'ON':
-                print(f"Статус депозита для счета {identification_account} уже установлен как 'ON'.")
+                print(f"Статус депозита для счета {IdentificationAccount} уже установлен как 'ON'.")
             else:
-                print(f"Счет {identification_account} не найден.")
+                print(f"Счет {IdentificationAccount} не найден.")
 
     class SetOff:
         def __call__(self, request, cursor, conn):
-            identification_account = request['identification_account']
-            cursor.execute("SELECT status_deposit FROM deposit_accounts WHERE identification_account = ?",
-                           (identification_account,))
+            IdentificationAccount = request['IdentificationAccount']
+            cursor.execute("SELECT StatusDeposit FROM deposit_accounts WHERE IdentificationAccount = ?",
+                           (IdentificationAccount,))
             current_status = cursor.fetchone()
             if current_status and current_status[0] != 'OFF':
-                cursor.execute("UPDATE deposit_accounts SET status_deposit = 'OFF' WHERE identification_account = ?",
-                               (identification_account,))
+                cursor.execute("UPDATE deposit_accounts SET StatusDeposit = 'OFF' WHERE IdentificationAccount = ?",
+                               (IdentificationAccount,))
                 conn.commit()
-                print(f"Статус депозита для счета {identification_account} успешно изменен на 'OFF'.")
+                print(f"Статус депозита для счета {IdentificationAccount} успешно изменен на 'OFF'.")
             elif current_status and current_status[0] == 'OFF':
-                print(f"Статус депозита для счета {identification_account} уже установлен как 'OFF'.")
+                print(f"Статус депозита для счета {IdentificationAccount} уже установлен как 'OFF'.")
             else:
-                print(f"Счет {identification_account} не найден.")
+                print(f"Счет {IdentificationAccount} не найден.")
 
+    class GetBalance:
+        def __call__(self, request, cursor, conn):
+            IdentificationAccount = request['IdentificationAccount']
+            cursor.execute("SELECT Money FROM deposit_accounts WHERE IdentificationAccount = ?",
+                           (IdentificationAccount,))
+            account = cursor.fetchone()
+            if account:
+                print(f"Баланс на счете {IdentificationAccount} составляет {account[0]}.")
+            else:
+                print(f"Счет {IdentificationAccount} не найден.")
 
+    class PayDeposit:
+        def __call__(self, request, cursor, conn):
+            IdentificationAccount = request['IdentificationAccount']
+            cursor.execute(
+                "SELECT TimeActive,"
+                "LastPayTime,"
+                "PayTime,"
+                "TimeClose,"
+                "StatusDeposit FROM deposit_accounts WHERE IdentificationAccount = ?",
+                (IdentificationAccount,))
+            account = cursor.fetchone()
+            if account:
+                TimeActive, LastPayTime, PayTime, TimeClose, StatusDeposit = account
+                if StatusDeposit == 'ON':
+                    current_time = int(datetime.now().strftime('%s'))
+                    if int(current_time) - int(LastPayTime) >= int(PayTime):
+                        Money = request['Money']
+                        BIC = request['BIC']
+                        get_money_request = {
+                            'request': 'GetMoney',
+                            'IdentificationAccount': IdentificationAccount,
+                            'Money': Money
+                        }
+                        MethodDeposit.AnalyzeRequest()(get_money_request, cursor, conn)
+                        cursor.execute("UPDATE deposit_accounts SET LastPayTime = ? WHERE IdentificationAccount = ?",
+                                       (current_time, IdentificationAccount,))
+                        conn.commit()
+                        print(f"Время последнего зачисления для счета {IdentificationAccount} успешно обновлено.")
+                    if current_time > TimeClose:
+                        set_off_request = {'request': 'SetOff', 'IdentificationAccount': IdentificationAccount}
+                        MethodDeposit.AnalyzeRequest()(set_off_request, cursor, conn)
+                        print(f"Ваш депозитный счет успешно закрыт")
+                else:
+                    print(f"Депозит {IdentificationAccount} не активен.")
+            else:
+                print(f"Счет {IdentificationAccount} не найден.")

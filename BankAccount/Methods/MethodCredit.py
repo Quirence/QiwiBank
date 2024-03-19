@@ -14,67 +14,66 @@ class MethodCredit:
 
     class OpenAccount:
         def __call__(self, request, cursor, conn):
-            identification_account = request['identification_account']
-            cursor.execute("SELECT * FROM credit_accounts WHERE identification_account = ?",
-                           (identification_account,))
+            IdentificationAccount = request['IdentificationAccount']
+            cursor.execute("SELECT * FROM credit_accounts WHERE IdentificationAccount = ?",
+                           (IdentificationAccount,))
             account = cursor.fetchone()
             if account:
-                print(f"Аккаунт с идентификационным номером {identification_account} уже существует.")
+                print(f"Аккаунт с идентификационным номером {IdentificationAccount} уже существует.")
             else:
-                money = request['money']
                 BIC = request['BIC']
-                credit_limit = request['credit_limit']
+                CreditLimit = request['CreditLimit']
                 rank = request['rank']
-                cursor.execute("INSERT INTO credit_accounts VALUES (?, ?, ?, ?, ?)",
-                               (identification_account, money, BIC, credit_limit, rank))
+                cursor.execute("INSERT INTO credit_accounts VALUES (?, ?, ?, ?)",
+                               (IdentificationAccount, BIC, CreditLimit, rank))
                 conn.commit()
-                print(f"Счет {identification_account} успешно открыт.")
+                print(f"Счет {IdentificationAccount} успешно открыт.")
 
     class CloseAccount:
         def __call__(self, request, cursor, conn):
-            identification_account = request['identification_account']
-            cursor.execute("SELECT * FROM credit_accounts WHERE identification_account = ?",
-                           (identification_account,))
+            IdentificationAccount = request['IdentificationAccount']
+            cursor.execute("SELECT * FROM credit_accounts WHERE IdentificationAccount = ?",
+                           (IdentificationAccount,))
             account = cursor.fetchone()
             if account:
-                cursor.execute("DELETE FROM credit_accounts WHERE identification_account = ?",
-                               (identification_account,))
+                cursor.execute("DELETE FROM credit_accounts WHERE IdentificationAccount = ?",
+                               (IdentificationAccount,))
                 conn.commit()
-                print(f"Счет {identification_account} успешно закрыт.")
+                print(f"Счет {IdentificationAccount} успешно закрыт.")
             else:
-                print(f"Счет {identification_account} не найден.")
+                print(f"Счет {IdentificationAccount} не найден.")
 
     class GetMoney:
         def __call__(self, request, cursor, conn):
-            identification_account = request['identification_account']
-            money = request['money']
-            cursor.execute("SELECT * FROM credit_accounts WHERE identification_account = ?",
-                           (identification_account,))
+            IdentificationAccount = request['IdentificationAccount']
+            Money = request['Money']
+            cursor.execute("SELECT * FROM credit_accounts WHERE IdentificationAccount = ?",
+                           (IdentificationAccount,))
             account = cursor.fetchone()
             if account:
-                cursor.execute("UPDATE credit_accounts SET money = money + ? WHERE identification_account = ?",
-                               (money, identification_account))
+                cursor.execute("UPDATE credit_accounts SET Money = Money + ? WHERE IdentificationAccount = ?",
+                               (Money, IdentificationAccount))
                 conn.commit()
-                print(f"Сумма {money} успешно зачислена на счет {identification_account}.")
+                print(f"Сумма {Money} успешно зачислена на счет {IdentificationAccount}.")
             else:
-                print(f"Счет {identification_account} не найден.")
+                print(f"Счет {IdentificationAccount} не найден.")
 
     class GiveMoney:
         def __call__(self, request, cursor, conn):
-            identification_account = request['identification_account']
-            money = request['money']
-            credit_limit = request['credit_limit']
-            cursor.execute("SELECT money FROM credit_accounts WHERE identification_account = ?",
-                           (identification_account,))
+            IdentificationAccount = request['IdentificationAccount']
+            Money = request['Money']
+            CreditLimit = request['CreditLimit']
+            cursor.execute("SELECT Money FROM credit_accounts WHERE IdentificationAccount = ?",
+                           (IdentificationAccount,))
             account = cursor.fetchone()
             if account:
-                current_money = account[0]
-                if current_money + credit_limit >= money:
-                    cursor.execute("UPDATE credit_accounts SET money = money - ? WHERE identification_account = ?",
-                                   (money, identification_account))
+                CurrentMoney = account[0]
+                if CurrentMoney + CreditLimit >= Money:
+                    cursor.execute("UPDATE credit_accounts SET Money = Money - ? WHERE IdentificationAccount = ?",
+                                   (Money, IdentificationAccount))
                     conn.commit()
-                    print(f"Сумма {money} успешно списана со счета {identification_account}.")
+                    print(f"Сумма {Money} успешно списана со счета {IdentificationAccount}.")
                 else:
-                    print(f"Недостаточно средств на счете {identification_account}.")
+                    print(f"Недостаточно средств на счете {IdentificationAccount}.")
             else:
-                print(f"Счет {identification_account} не найден.")
+                print(f"Счет {IdentificationAccount} не найден.")
