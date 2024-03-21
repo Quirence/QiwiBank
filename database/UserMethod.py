@@ -87,11 +87,26 @@ class User:
                 print("Аккаунта с указанными данными не существует.")
                 return 0
 
+    class GetFSP:
+        def __call__(self, request, cursor, conn):
+            user_id = request['id']
+            fsp = cursor.execute("SELECT name, surname, patronymic FROM users WHERE id = ?", (user_id,))
+            fsp_fetch = fsp.fetchone()
+            if fsp_fetch:
+                out = {
+                    'name': fsp_fetch[0],
+                    'surname': fsp_fetch[1],
+                    'patronymic': fsp_fetch[2]
+                }
+                return out
+            else:
+                print("Аккаунта с указанными данными не существует.")
+
 
 user = User()
 request1 = {
     'id': '4',
-    'request': 'IsVerified',
+    'request': 'GetFSP',
     'surname': 'Семён',
     'name': 'Ебучий',
     'passport_data': '1112',
@@ -100,4 +115,4 @@ request1 = {
     'number': '+79029450736',
     'password': 'logobun3'
 }
-
+user.treatment_request(request1)
