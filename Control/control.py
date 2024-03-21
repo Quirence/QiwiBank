@@ -1,4 +1,6 @@
 from BankAccount.BankAccount import BankAccount
+
+
 class Bank:
     def __init__(self, frontend_info):
         # Инициализация банка - получение информации о пользователе по информации из фронтенда (логин и сессия)
