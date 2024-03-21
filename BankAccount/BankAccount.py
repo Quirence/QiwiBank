@@ -56,8 +56,7 @@ class BankAccount:
                                    Rank TEXT DEFAULT 'AAA',
                                    TimeActive INTEGER DEFAULT (strftime('%s', 'now')),
                                    LastPayTime INTEGER DEFAULT (strftime('%s', 'now')),
-                                   PayTime INTEGER,
-                                   TimeClose INTEGER)''')
+                                   PayTime INTEGER)''')
             self.conn.commit()
 
         def treatment_request(self, request):
@@ -91,11 +90,13 @@ bank_account = BankAccount()
 
 # Запрос на открытие депозитного счета
 request = {
-    'kind_of_account': 'Deposit',
-    'request': 'PayDeposit',
+    'kind_of_account': 'Credit',
+    'request': 'PayCredit',
     'IdentificationAccount': '12345',
-    'Money': 50000.0,
+    'Money': -50,
     'BIC': 'ABC123',
+    'Rank': 'AAA',
+    'CreditLimit': 5000,
     'PayTime': 5,
     'TimeClose': 10,
     'StatusDeposit': 'ON'
