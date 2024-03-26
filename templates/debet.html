@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление счетом</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="text-center">Управление счетом</h2>
+    <form id="accountForm" method="POST" action="/manage_account">
+        <div class="form-group">
+            <select class="form-control" name="action" id="action" required>
+                <option value="" selected disabled hidden>Выберите действие</option>
+                <option value="open_account">Открыть счет</option>
+                <option value="close_account">Закрыть счет</option>
+                <option value="send_money">Перевести деньги</option>
+            </select>
+        </div>
+        <div id="transferMoney" style="display: none;">
+            <div class="form-group">
+                <label for="phoneNumber">Номер телефона:</label>
+                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
+            </div>
+            <div class="form-group">
+                <label for="amount">Сумма денег:</label>
+                <input type="number" class="form-control" id="amount" name="amount" min="10" required>
+            </div>
+        </div>
+        <div id="openAccountButton">
+            <button type="button" class="btn btn-primary btn-block">Выполнить действие</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('action').addEventListener('change', function() {
+        var action = this.value;
+
+        if (action === "send_money") {
+            document.getElementById('transferMoney').style.display = "block";
+            document.getElementById('openAccountButton').innerHTML = '<button type="submit" class="btn btn-primary btn-block">Выполнить действие</button>';
+        } else {
+            document.getElementById('transferMoney').style.display = "none";
+            document.getElementById('openAccountButton').innerHTML = '<button type="submit" class="btn btn-primary btn-block">Выполнить действие</button>';
+        }
+    });
+</script>
+</body>
+</html>
+
+
