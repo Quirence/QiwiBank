@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Верификация</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="text-center">Верификация</h2>
+    <form id="registrationForm" method="POST" action="/register">
+        <div class="form-group">
+            <input type="text" class="form-control" name="passportSeries" placeholder="Серия паспорта" required pattern="\d{1,4}">
+            <small id="passportSeriesHelp" class="form-text text-danger d-none">Серия паспорта должна состоять из не более 4 цифр.</small>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="passportNumber" placeholder="Номер паспорта" required pattern="\d{1,6}">
+            <small id="passportNumberHelp" class="form-text text-danger d-none">Номер паспорта должен состоять из не более 6 цифр.</small>
+        </div>
+        <input type="hidden" name="method" value="verification">
+        <button type="submit" class="btn btn-primary btn-block">Подтвердить</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('verificationForm').addEventListener('submit', function (event) {
+        var passportSeries = document.getElementsByName('passportSeries')[0].value;
+        var passportNumber = document.getElementsByName('passportNumber')[0].value;
+
+        if (!(/^\d{1,4}$/.test(passportSeries))) {
+            event.preventDefault();
+            document.getElementById('passportSeriesHelp').classList.remove('d-none');
+        }
+
+        if (!(/^\d{1,6}$/.test(passportNumber))) {
+            event.preventDefault();
+            document.getElementById('passportNumberHelp').classList.remove('d-none');
+        }
+    });
+</script>
+</body>
+</html>
