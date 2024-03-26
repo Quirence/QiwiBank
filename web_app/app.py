@@ -1,6 +1,7 @@
 import socket
 from views import *
 from urllib.parse import unquote_plus
+from Control.control import Bank
 
 HOST = ("localhost", 7777)
 
@@ -93,11 +94,22 @@ def GenerateRes(request):
     method, url, headers, data = parse_request(request)
     if method != "GET":
         print(data)
-    headers, code = generate_headers(method, url)
 
-    body = generate_content(code, url)
+    # Проверяем URL запроса
+    if url == "/register" and method == "POST":
+        # Создаем экземпляр класса Bank
+        bank = Bank(None)  # В данном случае frontend_info не используется, поэтому передаем None
+        # Вызываем метод create_account с данными из запроса
+        response_message = bank.create_account(None,
+                                               data)  # В данном случае account_type не используется, поэтому передаем None
+        # Кодируем ответ в байтовый объект перед отправкой
+        response = (f"HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n{response_message}").encode()
+    else:
+        headers, code = generate_headers(method, url)
+        body = generate_content(code, url)
+        response = (headers + body).encode()  # Также кодируем ответ в байтовый объект
 
-    return (headers + body).encode()
+    return response
 
 
 def run():
