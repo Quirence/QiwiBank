@@ -38,7 +38,8 @@ class User:
                 'delete': User.DelUser(),
                 'verification': User.VerifyUser(),
                 'is_verified': User.IsVerified(),
-                'get_id': User.GetID()
+                'get_id': User.GetID(),
+                'get_password': User.GetPasswordByEmail()  # Добавляем новую функцию в словарь
             }
 
             # Получаем метод из словаря, если он есть, и вызываем его
@@ -47,7 +48,6 @@ class User:
                 method(request, cursor, conn)
             else:
                 print(f"Unsupported request type: {request_type}")
-
     class AddUser:
         def __call__(self, request, cursor, conn):
             email = request['email']
@@ -101,16 +101,13 @@ class User:
                 print("Аккаунта с указанными данными не существует.")
                 return 0
 
-
-user = User()
-request1 = {
-    'id': '4',
-    'request': 'IsVerified',
-    'surname': 'Семён',
-    'name': 'Ебучий',
-    'passport_data': '1112',
-    'patronymic': 'Нигга',
-    'email': 'artiom.burkal123@mail.ru',
-    'number': '+79029450736',
-    'password': 'logobun3'
-}
+    class GetPasswordByEmail:
+        def __call__(self, request, cursor, conn):
+            email = request['email']
+            cursor.execute("SELECT password FROM users WHERE email = ?", (email,))
+            account = cursor.fetchone()
+            if account:
+                return account[0]
+            else:
+                print("Аккаунта с указанными данными не существует.")
+                return None
