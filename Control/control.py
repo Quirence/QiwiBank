@@ -47,7 +47,7 @@ class Control:
             new_request = request.copy()
             new_request['request'] = 'GetPassword'
             password = request['password']
-            stored_password = self.user_analyzer()(request)
+            stored_password = self.user_analyzer(new_request)
             if stored_password == password:
                 print("Authentication successful.")
                 return {'status': 'success', 'redirect': '/main'}  # Redirect to the main page
