@@ -1,12 +1,9 @@
-import os
 import sqlite3
+import os
+
 class User:
     def __init__(self):
-        # Получаем путь к текущему файлу
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        # Формируем путь к базе данных
-        db_path = os.path.join(current_dir, 'users.db')
-
+        db_path = os.path.join(os.path.dirname(__file__), 'users.db')
         self.conn = sqlite3.connect(db_path)
         self.cursor = self.conn.cursor()
         self.create_table()
@@ -32,22 +29,12 @@ class User:
     class AnalyzeRequest:
         def __call__(self, request, cursor, conn):
             request_type = request['method']
-
-            request_methods = {
-                'registration': User.AddUser(),
-                'delete': User.DelUser(),
-                'verification': User.VerifyUser(),
-                'is_verified': User.IsVerified(),
-                'get_id': User.GetID(),
-                'get_password': User.GetPasswordByEmail()  # Добавляем новую функцию в словарь
-            }
-
-            # Получаем метод из словаря, если он есть, и вызываем его
-            method = request_methods.get(request_type)
-            if method:
+            try:
+                method = getattr(User, request_type)()
                 method(request, cursor, conn)
-            else:
+            except AttributeError:
                 print(f"Unsupported request type: {request_type}")
+
     class AddUser:
         def __call__(self, request, cursor, conn):
             email = request['email']
@@ -101,13 +88,28 @@ class User:
                 print("Аккаунта с указанными данными не существует.")
                 return 0
 
-    class GetPasswordByEmail:
+    class GetFSP:
+        def __call__(self, request, cursor, conn):
+            user_id = request['id']
+            fsp = cursor.execute("SELECT name, surname, patronymic FROM users WHERE id = ?", (user_id,))
+            fsp_fetch = fsp.fetchone()
+            if fsp_fetch:
+                out = {
+                    'name': fsp_fetch[0],
+                    'surname': fsp_fetch[1],
+                    'patronymic': fsp_fetch[2]
+                }
+                return out
+            else:
+                print("Аккаунта с указанными данными не существует.")
+
+    class GetPassword:
         def __call__(self, request, cursor, conn):
             email = request['email']
             cursor.execute("SELECT password FROM users WHERE email = ?", (email,))
-            account = cursor.fetchone()
-            if account:
-                return account[0]
+            password = cursor.fetchone()
+            if password:
+                return password[0]
             else:
-                print("Аккаунта с указанными данными не существует.")
+                print("Аккаунт с указанными данными не существует.")
                 return None

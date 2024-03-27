@@ -1,19 +1,23 @@
-GET /main HTTP/1.1
+POST /login HTTP/1.1
 Host: localhost:7777
 Connection: keep-alive
+Content-Length: 44
 Cache-Control: max-age=0
+sec-ch-ua: "Not_A Brand";v="8", "Chromium";v="120", "YaBrowser";v="24.1", "Yowser";v="2.5"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Windows"
 Upgrade-Insecure-Requests: 1
+Origin: http://localhost:7777
+Content-Type: application/x-www-form-urlencoded
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 YaBrowser/24.1.0.0 Safari/537.36
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
 Sec-Fetch-Site: same-origin
 Sec-Fetch-Mode: navigate
 Sec-Fetch-User: ?1
 Sec-Fetch-Dest: document
-sec-ch-ua: "Not_A Brand";v="8", "Chromium";v="120", "YaBrowser";v="24.1", "Yowser";v="2.5"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "Windows"
 Referer: http://localhost:7777/login
 Accept-Encoding: gzip, deflate, br
 Accept-Language: ru,en;q=0.9
 Cookie: Pycharm-7549ac6d=238543f9-f95b-4b54-86b7-3f0688fb7760
 
+email=r33r%40mail.ru&password=3&method=login

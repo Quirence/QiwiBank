@@ -1,10 +1,10 @@
 import socket
 from views import *
 from urllib.parse import unquote_plus
-from Control.control import Bank
+from Control.control import *
 
 HOST = ("localhost", 7777)
-
+control = Control()
 URLS = {
     "/": home,
     "/login": login,
@@ -28,7 +28,6 @@ def generate_headers(method, url):
         return "HTTP/1.1 404 Not found\nContent-Type: text/html; charset=utf-8\n\n", 404
 
     if url == "/login" and method == "POST":
-        # Обработка паролей
         new_location = "http://localhost:7777/main"
         return f"HTTP/1.1 302 Found\nLocation: {new_location}\nContent-Type: text/html; charset=utf-8\n\n", 302
 
@@ -89,28 +88,27 @@ def generate_content(code, url):
         return "<h1>405</h1><p>Method not allowed</p>"
     return URLS[url]()
 
-
 def GenerateRes(request):
     method, url, headers, data = parse_request(request)
     if method != "GET":
         print(data)
+    headers, code = generate_headers(method, url)
 
-    # Проверяем URL запроса
-    if url == "/register" and method == "POST":
-        # Создаем экземпляр класса Bank
-        bank = Bank(None)  # В данном случае frontend_info не используется, поэтому передаем None
-        # Вызываем метод create_account с данными из запроса
-        response_message = bank.create_account(None,
-                                               data)  # В данном случае account_type не используется, поэтому передаем None
-        # Кодируем ответ в байтовый объект перед отправкой
-        response = (f"HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n{response_message}").encode()
-    else:
-        headers, code = generate_headers(method, url)
-        body = generate_content(code, url)
-        response = (headers + body).encode()  # Также кодируем ответ в байтовый объект
+    # Если регистрация или аутентификация прошли успешно, выполняем редирект
+    if (url == '/register' or url == '/login') and method == "POST":
+        control_response = control.treatment_request(data)
+        if control_response.get('status') == 'success':
+            if url == '/login':
+                new_location = "/main"  # Перенаправление на main_page при аутентификации
+            else:
+                new_location = "/"  # Перенаправление на home_page при регистрации
+            headers = f"HTTP/1.1 302 Found\nLocation: {new_location}\nContent-Type: text/html; charset=utf-8\n\n"
+            return headers.encode()
+
+    body = generate_content(code, url)
+    response = (headers + body).encode()
 
     return response
-
 
 def run():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
