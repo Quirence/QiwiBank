@@ -1,4 +1,6 @@
 from QiwiBank.database.UserMethod import *
+
+
 class Control:
     def __init__(self):
         self.user = User()
@@ -6,7 +8,7 @@ class Control:
         self.control_analyzer = self.AnalyzeRequest(self.user_analyzer)
 
     def treatment_request(self, request):
-        self.control_analyzer(request)
+        return self.control_analyzer(request)
 
     class AnalyzeRequest:
         def __init__(self, user_analyzer):
@@ -15,8 +17,8 @@ class Control:
         def __call__(self, request):
             request_type = request['method']
             try:
-                method = getattr(Control, request_type.capitalize())
-                method()(request, self.user_analyzer)
+                method = getattr(Control, request_type)
+                return method(self.user_analyzer)(request)
             except AttributeError:
                 print(f"Unsupported request type: {request_type}")
 

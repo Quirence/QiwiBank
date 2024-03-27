@@ -88,16 +88,16 @@ def generate_content(code, url):
         return "<h1>405</h1><p>Method not allowed</p>"
     return URLS[url]()
 
-def GenerateRes(request):
+
+def generate_result(request):
     method, url, headers, data = parse_request(request)
     if method != "GET":
         print(data)
     headers, code = generate_headers(method, url)
-
     # Если регистрация или аутентификация прошли успешно, выполняем редирект
     if (url == '/register' or url == '/login') and method == "POST":
         control_response = control.treatment_request(data)
-        if control_response.get('status') == 'success':
+        if control_response is not None and control_response.get('status') == 'success':  # Убедимся, что control_response не является None
             if url == '/login':
                 new_location = "/main"  # Перенаправление на main_page при аутентификации
             else:
@@ -109,6 +109,7 @@ def GenerateRes(request):
     response = (headers + body).encode()
 
     return response
+
 
 def run():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -122,7 +123,7 @@ def run():
         request = client_socket.recv(2048)
         with open('out.txt', 'w') as f:
             f.write(request.decode("UTF-8"))
-        response = GenerateRes(request.decode("UTF-8"))
+        response = generate_result(request.decode("UTF-8"))
 
         client_socket.sendall(response)
         client_socket.close()
