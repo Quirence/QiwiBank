@@ -56,24 +56,44 @@ def redirect_to(location, session_id):
 
 
 def redirect_main(session_id):
-    # Перенаправление на главную страницу, если пользователь не вошел в систему
-    new_location = "/main"
-    return redirect_to(new_location, session_id)
+    if check_session_validity(session_id):
+        # Пользователь авторизован, перенаправляем на /verif_main
+        new_location = "/verif_main"
+        return redirect_to(new_location, session_id)
+    else:
+        # Пользователь не авторизован, перенаправляем на главную страницу
+        new_location = "/main"
+        return redirect_to(new_location, session_id)
 
 
 def generate_headers(method, url, session_id):
+    redirect_urls = {
+        "/login": "/verif_main",
+        "/register": "/verif_main",
+        "/main": "/verif_main"
+    }
+
     if url not in URLS:
         return "HTTP/1.1 404 Not found\nContent-Type: text/html; charset=utf-8\n\n", 404
 
-    if url == "/login" and method == "POST":
-        new_location = "http://localhost:7777/command"  # Перенаправляем на /command после успешной аутентификации
+    if url in redirect_urls and check_session_validity(session_id):
+        # Пользователь уже авторизован, перенаправляем на соответствующий URL
+        new_location = redirect_urls[url]
         return redirect_to(new_location, session_id), 302
 
-    if url != "/login" and url != "/register" and url != "/main" and not check_session_validity(session_id):
-        return redirect_main(session_id), 302
+    if method == "POST":
+        if url == "/login":
+            new_location = "http://localhost:7777/command"  # Перенаправляем на /command после успешной аутентификации
+            return redirect_to(new_location, session_id), 302
+        elif url == "/register":
+            # Пользователь только что зарегистрировался, перенаправляем на /verif_main
+            new_location = "/verif_main"
+            return redirect_to(new_location, session_id), 302
+        elif url not in POST_urls:
+            return "HTTP/1.1 405 Method not allowed\nContent-Type: text/html; charset=utf-8\n\n", 405
 
-    if method == "POST" and url not in POST_urls:
-        return "HTTP/1.1 405 Method not allowed\nContent-Type: text/html; charset=utf-8\n\n", 405
+    if url not in ["/login", "/register", "/main"] and not check_session_validity(session_id):
+        return redirect_main(session_id), 302
 
     return "HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n", 200
 
