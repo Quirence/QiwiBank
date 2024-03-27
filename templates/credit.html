@@ -51,6 +51,7 @@
         </div>
         <div id="openAccountButton">
             <button type="submit" class="btn btn-primary btn-block">Выполнить действие</button>
+            <button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>
         </div>
     </form>
 </div>
@@ -61,15 +62,15 @@
 
         if (action === "open_account") {
             document.getElementById('creditConditions').style.display = "block";
-            document.getElementById('openAccountButton').innerHTML = '<button type="button" class="btn btn-primary btn-block" disabled>Открыть счет</button>';
+            document.getElementById('openAccountButton').innerHTML = '<button type="button" class="btn btn-primary btn-block" disabled>Открыть счет</button><button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>';
             document.getElementById('transferMoney').style.display = "none";
         } else if (action === "send_money") {
             document.getElementById('transferMoney').style.display = "block";
-            document.getElementById('openAccountButton').innerHTML = '<button type="submit" class="btn btn-primary btn-block">Выполнить действие</button>';
+            document.getElementById('openAccountButton').innerHTML = '<button type="submit" class="btn btn-primary btn-block">Выполнить действие</button><button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>';
             document.getElementById('creditConditions').style.display = "none";
         } else {
             document.getElementById('creditConditions').style.display = "none";
-            document.getElementById('openAccountButton').innerHTML = '<button type="submit" class="btn btn-primary btn-block">Выполнить действие</button>';
+            document.getElementById('openAccountButton').innerHTML = '<button type="submit" class="btn btn-primary btn-block">Выполнить действие</button><button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>';
             document.getElementById('transferMoney').style.display = "none";
         }
     });
@@ -83,6 +84,10 @@
             document.getElementById('accountForm').action = "/manage_account";
         }
     });
+
+    function goBack() {
+        window.location.href = '/verif_main';
+    }
 </script>
 </body>
 </html>

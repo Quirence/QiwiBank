@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Управление счетом</title>
+    <title>Управление депозитным счетом</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
@@ -52,6 +52,7 @@
         </div>
         <div id="openAccountButton">
             <button type="button" class="btn btn-primary btn-block">Выполнить действие</button>
+            <button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>
         </div>
     </form>
 </div>
@@ -59,19 +60,23 @@
 <script>
     document.getElementById('action').addEventListener('change', function() {
         var action = this.value;
+        var backButton = document.getElementById('openAccountButton').querySelector('.btn-secondary');
 
         if (action === "open_account") {
             document.getElementById('depositConditions').style.display = "block";
             document.getElementById('openAccountButton').innerHTML = '<button type="submit" class="btn btn-primary btn-block" disabled>Открыть счет</button>';
             document.getElementById('sendMoneyFields').style.display = "none";
+            document.getElementById('openAccountButton').appendChild(backButton);
         } else if (action === "send_money") {
             document.getElementById('depositConditions').style.display = "none";
             document.getElementById('openAccountButton').innerHTML = '<button type="submit" class="btn btn-primary btn-block">Выполнить действие</button>';
             document.getElementById('sendMoneyFields').style.display = "block";
+            document.getElementById('openAccountButton').appendChild(backButton);
         } else {
             document.getElementById('depositConditions').style.display = "none";
             document.getElementById('openAccountButton').innerHTML = '<button type="submit" class="btn btn-primary btn-block">Выполнить действие</button>';
             document.getElementById('sendMoneyFields').style.display = "none";
+            document.getElementById('openAccountButton').appendChild(backButton);
         }
     });
 
@@ -84,7 +89,10 @@
             document.getElementById('accountForm').action = "/manage_account";
         }
     });
+
+    function goBack() {
+        window.location.href = '/verif_main';
+    }
 </script>
 </body>
 </html>
-
