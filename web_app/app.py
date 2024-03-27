@@ -1,7 +1,7 @@
 import socket
 from views import *
 from urllib.parse import unquote_plus
-from QiwiBank.Control.control import *
+from Control.control import *
 
 HOST = ("localhost", 7777)
 control = Control()

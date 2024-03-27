@@ -1,5 +1,4 @@
-from QiwiBank.database.UserMethod import *
-
+from database.UserMethod import *
 
 class Control:
     def __init__(self):
@@ -8,7 +7,12 @@ class Control:
         self.control_analyzer = self.AnalyzeRequest(self.user_analyzer)
 
     def treatment_request(self, request):
+        User.thread_local.cursor = self.user.cursor  # Устанавливаем cursor в thread-local переменной
+        User.thread_local.conn = self.user.conn  # Устанавливаем conn в thread-local переменной
         return self.control_analyzer(request)
+
+    # Остальной код класса без изменений...
+
 
     class AnalyzeRequest:
         def __init__(self, user_analyzer):

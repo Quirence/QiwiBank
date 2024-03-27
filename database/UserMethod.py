@@ -1,13 +1,16 @@
 import sqlite3
 import os
+from threading import local  # Импортируем thread-local переменные
 
 class User:
+    thread_local = local()  # Создаем thread-local объект
+
     def __init__(self):
         db_path = os.path.join(os.path.dirname(__file__), 'users.db')
         self.conn = sqlite3.connect(db_path)
         self.cursor = self.conn.cursor()
         self.create_table()
-        self.analyzer = User.AnalyzeRequest()
+        self.analyzer = User.AnalyzeRequest()  # Теперь не передаем cursor и conn
 
     def create_table(self):
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS users
@@ -24,14 +27,16 @@ class User:
         self.conn.commit()
 
     def treatment_request(self, request):
-        self.analyzer(request, self.cursor, self.conn)
+        self.analyzer(request)
 
     class AnalyzeRequest:
-        def __call__(self, request, cursor, conn):
+        def __call__(self, request):
+            cursor = User.thread_local.cursor  # Получаем cursor из thread-local переменной
+            conn = User.thread_local.conn  # Получаем conn из thread-local переменной
             request_type = request['method']
             try:
                 method = getattr(User, request_type)()
-                method(request, cursor, conn)
+                return method(request, cursor, conn)  # Передаем cursor и conn
             except AttributeError:
                 print(f"Unsupported request type: {request_type}")
 
