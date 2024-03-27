@@ -11,7 +11,6 @@ class Control:
         User.thread_local.conn = self.user.conn  # Устанавливаем conn в thread-local переменной
         return self.control_analyzer(request)
 
-    # Остальной код класса без изменений...
 
 
     class AnalyzeRequest:
@@ -37,7 +36,7 @@ class Control:
                 print("Registration successful.")
                 return {'status': 'success', 'redirect': '/'}  # Redirect to the main page
             else:
-                print("Registration failed.")
+                print("Registration failed blyat.")
                 return {'status': 'failed'}
 
     class Login:

@@ -33,7 +33,7 @@ class User:
         def __call__(self, request):
             cursor = User.thread_local.cursor  # Получаем cursor из thread-local переменной
             conn = User.thread_local.conn  # Получаем conn из thread-local переменной
-            request_type = request['method']
+            request_type = request['request']
             try:
                 method = getattr(User, request_type)()
                 return method(request, cursor, conn)  # Передаем cursor и conn
@@ -58,6 +58,7 @@ class User:
                                "(?,?,?,?,?,?)",
                                (email, password, number, name, surname, patronymic))
                 conn.commit()
+                return 1
 
     class DelUser:
         def __call__(self, request, cursor, conn):
