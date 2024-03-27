@@ -1,4 +1,4 @@
-import templates
+import QiwiBank.templates
 
 
 def login():

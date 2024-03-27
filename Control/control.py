@@ -1,4 +1,4 @@
-from database.UserMethod import *
+from QiwiBank.database.UserMethod import *
 class Control:
     def __init__(self):
         self.user = User()
