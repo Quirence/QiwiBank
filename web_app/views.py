@@ -29,3 +29,17 @@ def command():
 def verification():
     with open("../templates/verification_form.html", encoding="utf-8") as template:
         return template.read()
+
+def verif_main():
+    with open("../templates/verif_main.html", encoding="utf-8") as template:
+        return template.read()
+
+def credit():
+    with open("../templates/credit.html", encoding="utf-8") as template:
+        return template.read()
+def debit():
+    with open("../templates/debit.html", encoding="utf-8") as template:
+        return template.read()
+def deposit():
+    with open("../templates/deposit.html", encoding="utf-8") as template:
+        return template.read()

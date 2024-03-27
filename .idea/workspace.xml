@@ -5,12 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="253dfc20-9b41-4621-9494-fafdc82f100e" name="Changes" comment="В юзер методы добавил функцию &quot;Вернуть пароль по емейлу&quot;">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_03_2024_18_28__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_03_2024_18_28__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_03_2024_18_30__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_03_2024_18_30__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Control/control.py" beforeDir="false" afterPath="$PROJECT_DIR$/Control/control.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/UserMethod.py" beforeDir="false" afterPath="$PROJECT_DIR$/database/UserMethod.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/users.db" beforeDir="false" afterPath="$PROJECT_DIR$/database/users.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/verif_main.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web_app/out.txt" beforeDir="false" afterPath="$PROJECT_DIR$/web_app/out.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web_app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app/views.py" afterDir="false" />
     </list>

@@ -11,8 +11,13 @@ URLS = {
     "/main": main,
     "/register": register,
     "/command": command,
-    "/verification": verification
+    "/verification": verification,
+    "/verif_main": verif_main,
+    "/credit": credit,
+    "/debit": debit,
+    "/deposit": deposit
 }
+
 
 POST_urls = {
     "/login": login,
@@ -99,12 +104,11 @@ def generate_result(request):
         control_response = control.treatment_request(data)
         if control_response is not None and control_response.get('status') == 'success':  # Убедимся, что control_response не является None
             if url == '/login':
-                new_location = "/main"  # Перенаправление на main_page при аутентификации
+                new_location = "/verif_main"  # Перенаправление на main_page при аутентификации
             else:
                 new_location = "/"  # Перенаправление на home_page при регистрации
             headers = f"HTTP/1.1 302 Found\nLocation: {new_location}\nContent-Type: text/html; charset=utf-8\n\n"
             return headers.encode()
-
     body = generate_content(code, url)
     response = (headers + body).encode()
 
