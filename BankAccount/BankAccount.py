@@ -1,7 +1,8 @@
 import sqlite3
-from Methods.MethodDebit import MethodDebit
-from Methods.MethodCredit import MethodCredit
-from Methods.MethodDeposit import MethodDeposit
+from BankAccount.Methods.MethodDebit import MethodDebit
+from BankAccount.Methods.MethodCredit import MethodCredit
+from BankAccount.Methods.MethodDeposit import MethodDeposit
+
 
 
 class BankAccount:
@@ -85,10 +86,9 @@ class BankAccount:
             self.analyzer(request, self.cursor, self.conn)
 
 
-# Создание экземпляра класса BankAccount
 bank_account = BankAccount()
-
 # Запрос на открытие депозитного счета
+
 request = {
     'kind_of_account': 'Credit',
     'request': 'GetMoney',
@@ -103,4 +103,3 @@ request = {
 }
 
 # Вызов метода process_request с различными запросами
-bank_account.process_request(request)
