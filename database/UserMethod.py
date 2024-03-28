@@ -94,6 +94,17 @@ class User:
                 print("Аккаунта с указанными данными не существует.")
                 return None
 
+    class NumberGetID:
+        def __call__(self, request, cursor, conn):
+            number = request['number']
+            cursor.execute("SELECT id FROM users WHERE number = ?", (number,))
+            account = cursor.fetchone()
+            if account:
+                return account[0]
+            else:
+                print("Аккаунта с указанными данными не существует.")
+                return None
+
     class GetFSP:
         def __call__(self, request, cursor, conn):
             user_id = request['id']
