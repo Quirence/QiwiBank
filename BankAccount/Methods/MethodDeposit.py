@@ -23,7 +23,7 @@ class MethodDeposit:
                 print(f"Аккаунт с идентификационным номером {IdentificationAccount} уже существует.")
             else:
                 BIC = request['BIC']
-                StatusDeposit = request['StatusDeposit']
+                StatusDeposit = request.get('StatusDeposit', 'DEFAULT')
                 PayTime = request.get('PayTime', 0)
                 Money = request.get('Money', 0)
                 TimeActive = request.get('TimeActive', int(datetime.now().strftime('%s')))
