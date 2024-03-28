@@ -56,6 +56,29 @@ class Control:
                 return {'status': 'failed'}
 
     # {'action': 'send_money', 'phoneNumber': '+79025780706', 'amount': '100'}
+    class Openaccount:
+        def __init__(self, user_analyzer):
+            self.user_analyzer = user_analyzer
+
+        def __call__(self, request, session):
+            email = session["email"]
+            kind_of_account = request["kind_of_account"]
+            id_user_request = {"email": email,
+                                "request": "GetID"}
+            id_user = self.user_analyzer(id_user_request)
+            open_request = {
+                'kind_of_account': kind_of_account,
+                'request': 'OpenAccount',
+                'IdentificationAccount': id_user,
+                'Money': 1000,
+                'BIC': 'ABC123',
+                'Rank': 'AAA',
+                'CreditLimit': 5000,
+                'PayTime': 5,
+                'TimeClose': 10,
+                'StatusDeposit': 'ON'
+            }
+            bank_account.process_request(open_request)
     class Sendmoney:
         def __init__(self, user_analyzer):
             self.user_analyzer = user_analyzer
@@ -85,34 +108,28 @@ class Control:
                     'IdentificationAccount': id_receiver,
                     'Money': amount
                 }
-                print(positive_request["kind_of_account"])
                 bank_account.process_request(positive_request)
                 bank_account.process_request(negative_request)
             else:
                 return {'status': 'failed'}
 
 
-request = {
+first_request = {
+    'method': 'Openaccount',
+    'kind_of_account': 'Debit',
+}
+
+second_request = {
     'method': 'Sendmoney',
     'phoneNumber': '+79025780706',
     'amount': '100',
     'kind_of_account': 'Debit',
 }
-request1 = {
-    'kind_of_account': 'Credit',
-    'request': 'GetMoney',
-    'IdentificationAccount': '12345',
-    'Money': 50,
-    'BIC': 'ABC123',
-    'Rank': 'AAA',
-    'CreditLimit': 5000,
-    'PayTime': 5,
-    'TimeClose': 10,
-    'StatusDeposit': 'ON'
-}
 
-session = {
+session1 = {
     "email": "bebra.hohol@gmail.com"
 }
+
 control = Control()
-control_response = control.treatment_request(request, session)
+control.treatment_request(first_request, session1)
+control.treatment_request(second_request, session1)
