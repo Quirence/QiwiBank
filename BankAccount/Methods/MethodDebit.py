@@ -21,8 +21,9 @@ class MethodDebit:
                 print(f"Аккаунт с идентификационным номером {IdentificationAccount} уже существует.")
             else:
                 BIC = request['BIC']
-                cursor.execute("INSERT INTO debit_accounts VALUES (?, ?)",
-                               (IdentificationAccount, BIC))
+                Money = request.get('Money', 'DEFAULT')
+                cursor.execute("INSERT INTO debit_accounts VALUES (?, ?, ?)",
+                               (IdentificationAccount, Money, BIC))
                 conn.commit()
                 print(f"Счет {IdentificationAccount} успешно открыт.")
 
@@ -73,7 +74,7 @@ class MethodDebit:
             else:
                 print(f"Счет {IdentificationAccount} не найден.")
 
-    class GetBalanceDebit:
+    class GetBalance:
         def __call__(self, request, cursor, conn):
             IdentificationAccount = request['IdentificationAccount']
             cursor.execute("SELECT Money FROM debit_accounts WHERE IdentificationAccount = ?",

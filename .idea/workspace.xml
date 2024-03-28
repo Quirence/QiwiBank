@@ -4,13 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="253dfc20-9b41-4621-9494-fafdc82f100e" name="Changes" comment="Работаем над контролом!!">
+    <list default="true" id="253dfc20-9b41-4621-9494-fafdc82f100e" name="Changes" comment="В юзер методы добавил функцию &quot;Вернуть пароль по емейлу&quot;">
       <change beforePath="$PROJECT_DIR$/.idea/QiwiBank.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/QiwiBank.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BankAccount/BankAccount.py" beforeDir="false" afterPath="$PROJECT_DIR$/BankAccount/BankAccount.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankAccount/Methods/MethodCredit.py" beforeDir="false" afterPath="$PROJECT_DIR$/BankAccount/Methods/MethodCredit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankAccount/Methods/MethodDebit.py" beforeDir="false" afterPath="$PROJECT_DIR$/BankAccount/Methods/MethodDebit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankAccount/Methods/MethodDeposit.py" beforeDir="false" afterPath="$PROJECT_DIR$/BankAccount/Methods/MethodDeposit.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BankAccount/credit_accounts.db" beforeDir="false" afterPath="$PROJECT_DIR$/BankAccount/credit_accounts.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankAccount/debit_accounts.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankAccount/deposit_accounts.db" beforeDir="false" afterPath="$PROJECT_DIR$/BankAccount/deposit_accounts.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Control/control.py" beforeDir="false" afterPath="$PROJECT_DIR$/Control/control.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/UserMethod.py" beforeDir="false" afterPath="$PROJECT_DIR$/database/UserMethod.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app/app.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +100,6 @@
   <component name="RunManager">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="QiwiBank" />
-      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -153,9 +158,7 @@
       <workItem from="1711462832474" duration="841000" />
       <workItem from="1711523835566" duration="4644000" />
       <workItem from="1711597032499" duration="41000" />
-      <workItem from="1711609778672" duration="4932000" />
-      <workItem from="1711635800338" duration="3790000" />
-      <workItem from="1711639695364" duration="1053000" />
+      <workItem from="1711609778672" duration="4770000" />
     </task>
     <task id="LOCAL-00001" summary="Updated">
       <option name="closed" value="true" />
@@ -229,15 +232,7 @@
       <option name="project" value="LOCAL" />
       <updated>1711463038499</updated>
     </task>
-    <task id="LOCAL-00010" summary="Работаем над контролом!!">
-      <option name="closed" value="true" />
-      <created>1711614651551</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1711614651551</updated>
-    </task>
-    <option name="localTasksCounter" value="11" />
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -259,18 +254,6 @@
     <MESSAGE value="Надеюсь не сломал" />
     <MESSAGE value="В юзер методы добавил функцию &quot;Вернуть пароль по емейлу&quot;" />
     <MESSAGE value="Логин форма сделана" />
-    <MESSAGE value="Работаем над контролом!!" />
-    <option name="LAST_COMMIT_MESSAGE" value="Работаем над контролом!!" />
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/QiwiBank$routes.coverage" NAME="routes Coverage Results" MODIFIED="1708776332516" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app" />
-    <SUITE FILE_PATH="coverage/QiwiBank$view.coverage" NAME="view Coverage Results" MODIFIED="1708676915405" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/App" />
-    <SUITE FILE_PATH="coverage/QiwiBank$control.coverage" NAME="control Coverage Results" MODIFIED="1711640730626" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Control" />
-    <SUITE FILE_PATH="coverage/QiwiBank$views.coverage" NAME="views Coverage Results" MODIFIED="1710999475110" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app" />
-    <SUITE FILE_PATH="coverage/QiwiBank$users.coverage" NAME="users Coverage Results" MODIFIED="1708679679537" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/database" />
-    <SUITE FILE_PATH="coverage/QiwiBank$main.coverage" NAME="main Coverage Results" MODIFIED="1711593764671" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/QiwiBank$app.coverage" NAME="app Coverage Results" MODIFIED="1711639696702" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app" />
-    <SUITE FILE_PATH="coverage/QiwiBank$test.coverage" NAME="test Coverage Results" MODIFIED="1711002905197" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app" />
-    <SUITE FILE_PATH="coverage/QiwiBank$BankAccount.coverage" NAME="BankAccount Coverage Results" MODIFIED="1711640685835" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/BankAccount" />
+    <option name="LAST_COMMIT_MESSAGE" value="Логин форма сделана" />
   </component>
 </project>

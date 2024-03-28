@@ -153,6 +153,7 @@ def generate_content(code, url):
 
 def generate_result(request):
     method, url, headers, data = parse_request(request)
+    print(data)
     session_id = None
     user_email = None
     if "Cookie" in headers:

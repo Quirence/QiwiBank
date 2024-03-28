@@ -117,7 +117,7 @@ class MethodCredit:
             else:
                 print(f"Счет {IdentificationAccount} не найден.")
 
-    class GetBalanceСredit:
+    class GetBalance:
         def __call__(self, request, cursor, conn):
             IdentificationAccount = request['IdentificationAccount']
             cursor.execute("SELECT Money FROM credit_accounts WHERE IdentificationAccount = ?",

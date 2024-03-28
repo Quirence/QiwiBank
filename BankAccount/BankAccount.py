@@ -34,8 +34,8 @@ class BankAccount:
         def create_table(self):
             self.cursor.execute('''CREATE TABLE IF NOT EXISTS debit_accounts
                                    (IdentificationAccount TEXT,
-                                   Money REAL,
-                                   BIC TEXT)''')
+                                   Money REAL DEFAULT 0,
+                                   BIC TEXT DEFAULT AAA)''')
             self.conn.commit()
 
         def treatment_request(self, request):
@@ -90,16 +90,11 @@ bank_account = BankAccount()
 # Запрос на открытие депозитного счета
 
 request = {
-    'kind_of_account': 'Credit',
-    'request': 'GetMoney',
-    'IdentificationAccount': '12345',
+    'kind_of_account': 'Debit',
+    'request': 'OpenAccount',
+    'IdentificationAccount': '777',
     'Money': 50,
-    'BIC': 'ABC123',
-    'Rank': 'AAA',
-    'CreditLimit': 5000,
-    'PayTime': 5,
-    'TimeClose': 10,
-    'StatusDeposit': 'ON'
+    'BIC': 'ABC123'
 }
 
 # Вызов метода process_request с различными запросами

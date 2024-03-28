@@ -99,7 +99,7 @@ class Control:
                     'kind_of_account': kind_of_account,
                     'request': 'GiveMoney',
                     'IdentificationAccount': id_giver,
-                    'Money': amount
+                    'Money': int(amount)
                 }
 
                 negative_request = {
