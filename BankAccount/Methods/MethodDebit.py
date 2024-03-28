@@ -2,7 +2,6 @@ import sqlite3
 
 
 class MethodDebit:
-
     class AnalyzeRequest:
         def __call__(self, request, cursor, conn):
             request_type = request['request']
@@ -73,3 +72,15 @@ class MethodDebit:
                     print(f"Недостаточно средств на счете {IdentificationAccount}.")
             else:
                 print(f"Счет {IdentificationAccount} не найден.")
+
+    class GetBalanceDebit:
+        def __call__(self, request, cursor, conn):
+            IdentificationAccount = request['IdentificationAccount']
+            cursor.execute("SELECT Money FROM debit_accounts WHERE IdentificationAccount = ?",
+                           (IdentificationAccount,))
+            money = cursor.fetchone()
+            if money:
+                # Возвращаем баланс в виде строки
+                return str(money[0])
+            else:
+                print("Счёта с указанными данными не существует.")
