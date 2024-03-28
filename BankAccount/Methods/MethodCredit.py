@@ -1,8 +1,8 @@
 import sqlite3
 from datetime import datetime
 
-class MethodCredit:
 
+class MethodCredit:
     class AnalyzeRequest:
         def __call__(self, request, cursor, conn):
             request_type = request['request']
@@ -117,3 +117,13 @@ class MethodCredit:
             else:
                 print(f"Счет {IdentificationAccount} не найден.")
 
+    class GetBalanceСredit:
+        def __call__(self, request, cursor, conn):
+            IdentificationAccount = request['IdentificationAccount']
+            cursor.execute("SELECT Money FROM credit_accounts WHERE IdentificationAccount = ?",
+                           (IdentificationAccount,))
+            money = cursor.fetchone()
+            if money:
+                return money
+            else:
+                print('Счёта с указанными данными не существует.')

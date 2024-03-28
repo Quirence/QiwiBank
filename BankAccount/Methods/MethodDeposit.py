@@ -165,3 +165,15 @@ class MethodDeposit:
                     print(f"Депозит {IdentificationAccount} не активен.")
             else:
                 print(f"Счет {IdentificationAccount} не найден.")
+
+    class GetBalanceDeposit:
+        def __call__(self, request, cursor, conn):
+            IdentificationAccount = request['IdentificationAccount']
+            cursor.execute("SELECT Money FROM deposit_accounts WHERE IdentificationAccount = ?",
+                           (IdentificationAccount,))
+            money = cursor.fetchone()
+            if money:
+                return money
+            else:
+                print('Счёта с указанными данными не существует.')
+
