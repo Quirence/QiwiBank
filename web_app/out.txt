@@ -1,17 +1,45 @@
-GET /verif_main HTTP/1.1
-Host: localhost:7777
-Connection: keep-alive
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
-Sec-Fetch-Site: none
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-sec-ch-ua: "Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-Accept-Encoding: gzip, deflate, br, zstd
-Accept-Language: ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7
-Cookie: session_id=1711552912.1545541
+POST /manage_account HTTP/1.1
 
+Host: localhost:7777
+
+Connection: keep-alive
+
+Content-Length: 55
+
+Cache-Control: max-age=0
+
+sec-ch-ua: "Not_A Brand";v="8", "Chromium";v="120", "YaBrowser";v="24.1", "Yowser";v="2.5"
+
+sec-ch-ua-mobile: ?0
+
+sec-ch-ua-platform: "Windows"
+
+Upgrade-Insecure-Requests: 1
+
+Origin: http://localhost:7777
+
+Content-Type: application/x-www-form-urlencoded
+
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 YaBrowser/24.1.0.0 Safari/537.36
+
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+
+Sec-Fetch-Site: same-origin
+
+Sec-Fetch-Mode: navigate
+
+Sec-Fetch-User: ?1
+
+Sec-Fetch-Dest: document
+
+Referer: http://localhost:7777/debit
+
+Accept-Encoding: gzip, deflate, br
+
+Accept-Language: ru,en;q=0.9
+
+Cookie: Pycharm-7549ac6d=238543f9-f95b-4b54-86b7-3f0688fb7760; session_id=1711612354.0101147
+
+
+
+action=send_money&phoneNumber=%2B79025780706&amount=100

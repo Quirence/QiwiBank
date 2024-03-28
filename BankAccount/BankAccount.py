@@ -91,9 +91,9 @@ bank_account = BankAccount()
 # Запрос на открытие депозитного счета
 request = {
     'kind_of_account': 'Credit',
-    'request': 'PayCredit',
+    'request': 'GetMoney',
     'IdentificationAccount': '12345',
-    'Money': -50,
+    'Money': 50,
     'BIC': 'ABC123',
     'Rank': 'AAA',
     'CreditLimit': 5000,

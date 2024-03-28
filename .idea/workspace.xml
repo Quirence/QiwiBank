@@ -5,7 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="253dfc20-9b41-4621-9494-fafdc82f100e" name="Changes" comment="В юзер методы добавил функцию &quot;Вернуть пароль по емейлу&quot;">
+      <change beforePath="$PROJECT_DIR$/.idea/QiwiBank.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/QiwiBank.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_03_2024_18_28__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_03_2024_18_28__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_03_2024_18_30__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_03_2024_18_30__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankAccount/BankAccount.py" beforeDir="false" afterPath="$PROJECT_DIR$/BankAccount/BankAccount.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Control/control.py" beforeDir="false" afterPath="$PROJECT_DIR$/Control/control.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/UserMethod.py" beforeDir="false" afterPath="$PROJECT_DIR$/database/UserMethod.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/users.db" beforeDir="false" afterPath="$PROJECT_DIR$/database/users.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web_app/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web_app/out.txt" beforeDir="false" afterPath="$PROJECT_DIR$/web_app/out.txt" afterDir="false" />
@@ -30,7 +37,6 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -62,6 +68,7 @@
     &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
     &quot;JavaScript Debug.main_page.html.executor&quot;: &quot;Run&quot;,
     &quot;JavaScript Debug.registration_form.html.executor&quot;: &quot;Run&quot;,
+    &quot;Python.BankAccount.executor&quot;: &quot;Run&quot;,
     &quot;Python.app.executor&quot;: &quot;Run&quot;,
     &quot;Python.control.executor&quot;: &quot;Run&quot;,
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
@@ -92,17 +99,18 @@
   <component name="RunManager">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="QiwiBank" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.12" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/web_app" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/web_app/app.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -149,6 +157,8 @@
       <workItem from="1711449002222" duration="6872000" />
       <workItem from="1711462832474" duration="841000" />
       <workItem from="1711523835566" duration="4644000" />
+      <workItem from="1711597032499" duration="41000" />
+      <workItem from="1711609778672" duration="4770000" />
     </task>
     <task id="LOCAL-00001" summary="Updated">
       <option name="closed" value="true" />
@@ -245,5 +255,16 @@
     <MESSAGE value="В юзер методы добавил функцию &quot;Вернуть пароль по емейлу&quot;" />
     <MESSAGE value="Логин форма сделана" />
     <option name="LAST_COMMIT_MESSAGE" value="Логин форма сделана" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/QiwiBank$routes.coverage" NAME="routes Coverage Results" MODIFIED="1708776332516" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app" />
+    <SUITE FILE_PATH="coverage/QiwiBank$view.coverage" NAME="view Coverage Results" MODIFIED="1708676915405" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/App" />
+    <SUITE FILE_PATH="coverage/QiwiBank$control.coverage" NAME="control Coverage Results" MODIFIED="1711614434176" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Control" />
+    <SUITE FILE_PATH="coverage/QiwiBank$views.coverage" NAME="views Coverage Results" MODIFIED="1710999475110" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app" />
+    <SUITE FILE_PATH="coverage/QiwiBank$users.coverage" NAME="users Coverage Results" MODIFIED="1708679679537" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/database" />
+    <SUITE FILE_PATH="coverage/QiwiBank$main.coverage" NAME="main Coverage Results" MODIFIED="1711593764671" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/QiwiBank$app.coverage" NAME="app Coverage Results" MODIFIED="1711614560175" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app" />
+    <SUITE FILE_PATH="coverage/QiwiBank$test.coverage" NAME="test Coverage Results" MODIFIED="1711002905197" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app" />
+    <SUITE FILE_PATH="coverage/QiwiBank$BankAccount.coverage" NAME="BankAccount Coverage Results" MODIFIED="1711612855059" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/BankAccount" />
   </component>
 </project>

@@ -92,7 +92,7 @@ class User:
                 return account[0]
             else:
                 print("Аккаунта с указанными данными не существует.")
-                return 0
+                return None
 
     class GetFSP:
         def __call__(self, request, cursor, conn):

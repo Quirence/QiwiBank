@@ -21,7 +21,7 @@ URLS = {
     "/verif_main": verif_main,
     "/credit": credit,
     "/debit": debit,
-    "/deposit": deposit
+    "/deposit": deposit,
 }
 
 POST_urls = {
@@ -150,6 +150,8 @@ def generate_content(code, url):
 
 def generate_result(request):
     method, url, headers, data = parse_request(request)
+    if method == "POST":
+        print(data)
     session_id = None
     user_email = None
     if "Cookie" in headers:
@@ -161,7 +163,11 @@ def generate_result(request):
 
     headers, code = generate_headers(method, url, session_id)
     if (url == '/register' or url == '/login') and method == "POST":
-        control_response = control.treatment_request(data)
+        session = {
+            "email": "bebra.hohol@gmail.com",
+            "session_id": "something"
+        }
+        control_response = control.treatment_request(data, session)
         if control_response is not None and control_response.get('status') == 'success':
             user_email = control_response.get('email')
             session_id = generate_session_id()
