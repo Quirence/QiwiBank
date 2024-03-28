@@ -22,43 +22,30 @@
     <form id="sendMoneyForm" method="POST" action="/command">
         <div class="form-group">
             <label for="recipientNumber">Номер получателя</label>
-            <input type="text" class="form-control" id="recipientNumber" name="recipientNumber" placeholder="Введите номер получателя" required>
+            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Введите номер получателя" required>
         </div>
         <div class="form-group">
             <label for="amount">Сумма перевода</label>
             <input type="number" class="form-control" id="amount" name="amount" placeholder="Введите сумму для перевода" min="10" required>
         </div>
+        <!-- Hidden fields -->
+        <input type="hidden" name="method" value="sendmoney">
+        <input type="hidden" name="kind_of_account" value="debit">
+        <!-- End of hidden fields -->
         <div class="form-group">
-            <button type="button" class="btn btn-success btn-block" onclick="sendMoney()">Перевести деньги</button>
+            <button type="submit" class="btn btn-success btn-block">Перевести деньги</button>
             <button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>
         </div>
     </form>
 </div>
 
 <script>
-    function sendMoney() {
-        var form = document.getElementById('sendMoneyForm');
-        var formData = new FormData(form);
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/command');
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                alert('Запрос успешно отправлен');
-                // Дополнительные действия при успешной отправке
-            } else {
-                alert('Произошла ошибка при отправке запроса');
-                // Обработка ошибок
-            }
-        };
-        xhr.send(formData);
-    }
-
     function goBack() {
-        window.location.href = '/manage_account';
+        window.location.href = '/command';
     }
 </script>
 </body>
 </html>
+
 
 

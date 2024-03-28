@@ -1,5 +1,5 @@
 from database.UserMethod import *
-
+from BankAccount.BankAccount import bank_account
 
 class Control:
     def __init__(self):
@@ -7,7 +7,7 @@ class Control:
         self.user_analyzer = User.AnalyzeRequest()
         self.control_analyzer = self.AnalyzeRequest(self.user_analyzer)
 
-    def treatment_request(self, request, session=None):
+    def treatment_request(self, request, session):
         User.thread_local.cursor = self.user.cursor  # Устанавливаем cursor в thread-local переменной
         User.thread_local.conn = self.user.conn  # Устанавливаем conn в thread-local переменной
         print(session["email"])
@@ -62,15 +62,53 @@ class Control:
 
         def __call__(self, request, session):
             email = session["email"]
-            id_user_request = {"email": email,
-                               "request": "GetID"}
-            id_user = self.user_analyzer(id_user_request)
+            number = request['phoneNumber']
+            id_giver_request = {"email": email,
+                                "request": "GetID"}
+            id_receiver_request = {"number": number,
+                                   "request": "NumberGetID"}
+            id_giver = self.user_analyzer(id_giver_request)
+            id_receiver = self.user_analyzer(id_receiver_request)
+            if id_receiver is not None:
+                kind_of_account = request["kind_of_account"]
+                amount = request["amount"]
+                positive_request = {
+                    'kind_of_account': kind_of_account,
+                    'request': 'GiveMoney',
+                    'IdentificationAccount': id_giver,
+                    'Money': amount
+                }
+
+                negative_request = {
+                    'kind_of_account': kind_of_account,
+                    'request': 'GetMoney',
+                    'IdentificationAccount': id_receiver,
+                    'Money': amount
+                }
+                print(positive_request["kind_of_account"])
+                bank_account.process_request(positive_request)
+                bank_account.process_request(negative_request)
+            else:
+                return {'status': 'failed'}
 
 
 request = {
     'method': 'Sendmoney',
     'phoneNumber': '+79025780706',
-    'amount': '100'
+    'amount': '100',
+    'kind_of_account': 'Debit',
+}
+request1 = {
+    'kind_of_account': 'Credit',
+    'request': 'GetMoney',
+    'IdentificationAccount': '12345',
+    'Money': 50,
+    'BIC': 'ABC123',
+    'Rank': 'AAA',
+    'CreditLimit': 5000,
+    'PayTime': 5,
+    'TimeClose': 10,
+    'StatusDeposit': 'ON'
 }
 
 session = {
