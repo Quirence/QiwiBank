@@ -17,15 +17,15 @@
     </style>
 </head>
 <body>
-<div class="container">
+<<div class="container">
     <h2 class="text-center">Управление кредитным счетом</h2>
     <form id="accountForm" method="POST" action="/manage_account">
         <div class="form-group">
             <select class="form-control" name="action" id="action" required>
                 <option value="" selected disabled hidden>Выберите действие</option>
-                <option value="open_account">Оформить кредит</option>
+                <option value="open_account">Открыть счет</option>
                 <option value="close_account">Закрыть счет</option>
-                <option value="send_money">Отправить деньги</option>
+                <option value="send_money">Перевести деньги</option>
             </select>
         </div>
         <div id="creditConditions" style="display: none;">
@@ -39,7 +39,7 @@
                 </label>
             </div>
         </div>
-        <div id="transferMoney" style="display: none;">
+         <div id="transferMoney" style="display: none;">
             <div class="form-group">
                 <label for="phoneNumber">Номер телефона:</label>
                 <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
@@ -50,7 +50,7 @@
             </div>
         </div>
         <div id="openAccountButton">
-            <button type="submit" class="btn btn-primary btn-block">Выполнить действие</button>
+            <button type="button" class="btn btn-primary btn-block">Выполнить действие</button>
             <button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>
         </div>
     </form>
@@ -60,30 +60,21 @@
     document.getElementById('action').addEventListener('change', function() {
         var action = this.value;
 
-        if (action === "open_account") {
-            document.getElementById('creditConditions').style.display = "block";
-            document.getElementById('openAccountButton').innerHTML = '<button type="button" class="btn btn-primary btn-block" disabled>Открыть счет</button><button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>';
-            document.getElementById('transferMoney').style.display = "none";
-        } else if (action === "send_money") {
-            document.getElementById('transferMoney').style.display = "block";
-            document.getElementById('openAccountButton').innerHTML = '<button type="submit" class="btn btn-primary btn-block">Выполнить действие</button><button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>';
-            document.getElementById('creditConditions').style.display = "none";
-        } else {
-            document.getElementById('creditConditions').style.display = "none";
-            document.getElementById('openAccountButton').innerHTML = '<button type="submit" class="btn btn-primary btn-block">Выполнить действие</button><button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>';
-            document.getElementById('transferMoney').style.display = "none";
-        }
-    });
+    if (action === "send_money") {
+        document.getElementById('transferMoney').style.display = "block";
+        document.getElementById('creditConditions').style.display = "none"; // Скрываем условия кредита
+        document.getElementById('openAccountButton').innerHTML = '<button type="submit" class="btn btn-primary btn-block">Выполнить действие</button><button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>';
+    } else if (action === "open_account") {
+        document.getElementById('transferMoney').style.display = "none";
+        document.getElementById('creditConditions').style.display = "block"; // Показываем условия кредита
+        document.getElementById('openAccountButton').innerHTML = '<button type="submit" class="btn btn-primary btn-block">Выполнить действие</button><button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>';
+    } else {
+        document.getElementById('transferMoney').style.display = "none";
+        document.getElementById('creditConditions').style.display = "none";
+        document.getElementById('openAccountButton').innerHTML = '<button type="submit" class="btn btn-primary btn-block">Выполнить действие</button><button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>';
+    }
+});
 
-    document.getElementById('agreeConditions').addEventListener('change', function () {
-        if (this.checked) {
-            document.querySelector('#openAccountButton button').removeAttribute('disabled');
-            document.getElementById('accountForm').action = "/open_account";
-        } else {
-            document.querySelector('#openAccountButton button').setAttribute('disabled', 'disabled');
-            document.getElementById('accountForm').action = "/manage_account";
-        }
-    });
 
     function goBack() {
         window.location.href = '/verif_main';
@@ -91,3 +82,4 @@
 </script>
 </body>
 </html>
+

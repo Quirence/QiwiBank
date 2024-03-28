@@ -22,6 +22,9 @@ URLS = {
     "/credit": credit,
     "/debit": debit,
     "/deposit": deposit,
+    "/open_acc_debit": open_acc_debit,
+    "/close_acc_debit": close_acc_debit,
+    "/send_money_debit": send_money_debit
 }
 
 POST_urls = {
@@ -150,8 +153,6 @@ def generate_content(code, url):
 
 def generate_result(request):
     method, url, headers, data = parse_request(request)
-    if method == "POST":
-        print(data)
     session_id = None
     user_email = None
     if "Cookie" in headers:

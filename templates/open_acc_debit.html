@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Открытие счета</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+        }
+
+        .checkbox-label {
+            font-size: 0.9rem;
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="text-center">Открытие счета</h2>
+    <form id="openAccountForm" method="POST" action="/submit_open_acc">
+        <div class="form-group">
+            <label class="checkbox-label">
+                <input type="checkbox" id="agreeTerms" required>
+                Я прочитал(а) и согласен(на) с условиями открытия счета
+            </label>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block" disabled id="openButton">Открыть счет</button>
+            <button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('agreeTerms').addEventListener('change', function() {
+        document.getElementById('openButton').disabled = !this.checked;
+    });
+
+    function goBack() {
+        window.location.href = '/manage_account';
+    }
+</script>
+</body>
+</html>

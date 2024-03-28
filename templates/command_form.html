@@ -19,7 +19,7 @@
 <body>
 <div class="container">
     <h2 class="text-center">Управление счетом</h2>
-    <form id="accountForm" method="POST" action="/manage_account">
+    <form id="accountForm" method="GET" action="/manage_account">
         <div class="form-group">
             <select class="form-control" name="action" id="action" required>
                 <option value="" selected disabled hidden>Выберите действие</option>
@@ -29,6 +29,17 @@
             </select>
         </div>
         <input type="hidden" name="method" value="command">
+        <div id="sendMoneyFields" style="display: none;">
+            <div class="form-group">
+                <label for="phoneNumber">Номер телефона:</label>
+                <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" required>
+            </div>
+            <div class="form-group">
+                <label for="amount">Сумма:</label>
+                <input type="number" class="form-control" id="amount" name="amount" required>
+            </div>
+            <input type="hidden" name="kind_of_account" value="Credit">
+        </div>
         <button type="submit" class="btn btn-primary btn-block">Выполнить действие</button>
     </form>
 </div>
@@ -40,8 +51,13 @@
         if (action === "") {
             event.preventDefault();
             alert("Пожалуйста, выберите действие.");
+        } else if (action === "send_money") {
+            event.preventDefault();
+            document.getElementById('sendMoneyFields').style.display = 'block';
         }
     });
 </script>
 </body>
 </html>
+
+
