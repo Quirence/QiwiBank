@@ -29,7 +29,8 @@ URLS = {
     "/close_acc_credit": close_acc_credit,
     "/open_acc_deposit": open_acc_deposit,
     "/close_acc_deposit": close_acc_deposit,
-    "/send_money_credit": send_money_credit
+    "/send_money_credit": send_money_credit,
+    '/your_endpoint': 0
 }
 
 POST_urls = {
@@ -175,7 +176,8 @@ def generate_content(code, url):
 
 def generate_result(request):
     method, url, headers, data = parse_request(request)
-    print(data)
+    if method == "POST":
+        print(data)
     session_id = None
     user_email = None
     if "Cookie" in headers:
@@ -200,10 +202,17 @@ def generate_result(request):
             active_sessions[session_id] = {"start_time": time.time(), "email": user_email}
     session = active_sessions.get(session_id)
     if (url != "register" and url != "/login") and method == "POST":
-        control_response = control.treatment_request(data, session)
-
-    body = generate_content(code, url)
-    response = (headers + body).encode()
+        if data.get("method") == "Getbalance":
+            control_response = control.treatment_request(data, session)
+            balance = control_response.get("balance")
+            if balance:
+                balance = "Счет не существует"
+        control.treatment_request(data, session)
+    if url == '/your_endpoint':
+        response_body = f"<p>{balance}</p>"
+    else:
+        response_body = generate_content(code, url)
+    response = (headers + response_body).encode()
     return response
 
 
@@ -217,7 +226,6 @@ def run():
     while True:
         client_socket, addr = server_socket.accept()
         request = client_socket.recv(2048)
-        print(request.decode("UTF-8"))
         response = generate_result(request.decode("UTF-8"))
         client_socket.sendall(response)
         client_socket.close()

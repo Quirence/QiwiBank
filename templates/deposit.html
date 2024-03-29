@@ -1,3 +1,4 @@
+<!-- Для управления депозитным счетом -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,6 +15,25 @@
             max-width: 400px;
             margin: 50px auto;
         }
+
+        .btn-turquoise {
+            background-color: #40E0D0;
+            border-color: #40E0D0;
+        }
+
+        .btn-turquoise:hover {
+            background-color: #20B2AA;
+            border-color: #20B2AA;
+        }
+
+        /* Стили для окошка баланса */
+        #balanceDisplay {
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -29,30 +49,53 @@
             </select>
         </div>
         <div id="openAccountButton">
-            <button type="button" class="btn btn-primary btn-block" onclick="executeAction()">Выполнить действие</button>
+            <button type="button" class="btn btn-primary btn-block" onclick="executeAction('Deposit')">Выполнить действие</button>
             <button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>
+            <button type="button" class="btn btn-turquoise btn-block" onclick="refreshBalance('Deposit')">Обновить баланс</button>
+            <!-- Добавляем элемент для отображения баланса -->
+            <div id="balanceDisplay"></div>
         </div>
     </form>
 </div>
 
 <script>
-    function executeAction() {
+    function executeAction(accountType) {
         var action = document.getElementById('action').value;
         switch (action) {
             case 'open_account':
-                window.location.href = '/open_acc_deposit';
+                window.location.href = '/open_acc_' + accountType.toLowerCase();
                 break;
             case 'close_account':
-                window.location.href = '/close_acc_deposit';
+                window.location.href = '/close_acc_' + accountType.toLowerCase();
                 break;
             case 'send_money':
-                window.location.href = '/send_money_deposit';
+                window.location.href = '/send_money_' + accountType.toLowerCase();
                 break;
         }
     }
 
     function goBack() {
         window.location.href = '/verif_main';
+    }
+
+    function refreshBalance(accountType) {
+        fetch('/your_endpoint', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                method: 'Getbalance',
+                kind_of_account: accountType
+            })
+        }).then(response => response.text())
+          .then(data => {
+              // Обновляем содержимое элемента с id "balanceDisplay" на странице
+              document.getElementById('balanceDisplay').innerHTML = "<strong>Баланс:</strong> " + data;
+          })
+          .catch(error => {
+              console.error('Error refreshing balance:', error);
+          });
     }
 </script>
 </body>

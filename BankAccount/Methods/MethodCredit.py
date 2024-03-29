@@ -127,7 +127,6 @@ class MethodCredit:
                            (IdentificationAccount,))
             money = cursor.fetchone()
             if money:
-                print('balance if')
                 return money[0]+money[1]
             else:
                 print('Счёта с указанными данными не существует.')

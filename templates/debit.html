@@ -14,6 +14,25 @@
             max-width: 400px;
             margin: 50px auto;
         }
+
+        .btn-turquoise {
+            background-color: #40E0D0;
+            border-color: #40E0D0;
+        }
+
+        .btn-turquoise:hover {
+            background-color: #20B2AA;
+            border-color: #20B2AA;
+        }
+
+        /* Стили для окошка баланса */
+        #balanceDisplay {
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -31,6 +50,9 @@
         <div id="openAccountButton">
             <button type="button" class="btn btn-primary btn-block" onclick="executeAction()">Выполнить действие</button>
             <button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>
+            <button type="button" class="btn btn-turquoise btn-block" onclick="refreshBalance()">Обновить баланс</button>
+            <!-- Добавляем элемент для отображения баланса -->
+            <div id="balanceDisplay"></div>
         </div>
     </form>
 </div>
@@ -54,8 +76,26 @@
     function goBack() {
         window.location.href = '/verif_main';
     }
+
+    function refreshBalance() {
+        fetch('/your_endpoint', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                method: 'Getbalance',
+                kind_of_account: 'Debit'
+            })
+        }).then(response => response.text())
+          .then(data => {
+              // Обновляем содержимое элемента с id "balanceDisplay" на странице
+              document.getElementById('balanceDisplay').innerHTML = "<strong>Баланс:</strong> " + data;
+          })
+          .catch(error => {
+              console.error('Error refreshing balance:', error);
+          });
+    }
 </script>
 </body>
 </html>
-
-

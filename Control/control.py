@@ -191,7 +191,7 @@ session1 = {
     "email": "bebra.hohol@gmail.com"
 }
 
-# control = Control()
+control = Control()
 # control.treatment_request(fourth_request, session1)
 # control.treatment_request(second_request, session1)
 # control.treatment_request(third_request, session1)
