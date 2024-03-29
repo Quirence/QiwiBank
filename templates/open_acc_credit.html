@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Открытие счета</title>
+    <title>Открытие кредитного счета</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
@@ -19,21 +19,33 @@
             font-size: 0.9rem;
             font-weight: normal;
         }
+
+        .conditions {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #fff;
+        }
     </style>
 </head>
 <body>
 <div class="container">
-    <h2 class="text-center">Открытие счета</h2>
-    <form id="openAccountForm" method="POST" action="/debit">
+    <h2 class="text-center">Открытие кредитного счета</h2>
+    <div class="conditions">
+        <p><strong>Условия открытия кредитного счета:</strong></p>
+        <p>Процентная ставка: 10%</p>
+        <p>Лимит: $10,000</p>
+    </div>
+    <form id="openCreditAccountForm" method="POST" action="/credit">
         <div class="form-group">
             <label class="checkbox-label">
                 <input type="checkbox" id="agreeTerms" required>
-                Я прочитал(а) и согласен(на) с условиями открытия счета
+                Я прочитал(а) и согласен(на) с условиями открытия кредитного счета
             </label>
         </div>
         <!-- Hidden field for method -->
         <input type="hidden" name="method" value="Openaccount">
-        <input type="hidden" name="kind_of_account" value="Debit">
+        <input type="hidden" name="kind_of_account" value="Credit">
         <!-- End of hidden field -->
         <div class="form-group">
             <button type="submit" class="btn btn-primary btn-block" disabled id="openButton">Открыть счет</button>
@@ -48,7 +60,7 @@
     });
 
     function goBack() {
-        window.location.href = '/debit';
+        window.location.href = '/credit';
     }
 </script>
 </body>

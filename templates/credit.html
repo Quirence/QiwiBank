@@ -17,7 +17,7 @@
     </style>
 </head>
 <body>
-<<div class="container">
+<div class="container">
     <h2 class="text-center">Управление кредитным счетом</h2>
     <form id="accountForm" method="POST" action="/manage_account">
         <div class="form-group">
@@ -50,31 +50,27 @@
             </div>
         </div>
         <div id="openAccountButton">
-            <button type="button" class="btn btn-primary btn-block">Выполнить действие</button>
+            <button type="button" class="btn btn-primary btn-block" onclick="executeAction()">Выполнить действие</button>
             <button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>
         </div>
     </form>
 </div>
 
 <script>
-    document.getElementById('action').addEventListener('change', function() {
-        var action = this.value;
-
-    if (action === "send_money") {
-        document.getElementById('transferMoney').style.display = "block";
-        document.getElementById('creditConditions').style.display = "none"; // Скрываем условия кредита
-        document.getElementById('openAccountButton').innerHTML = '<button type="submit" class="btn btn-primary btn-block">Выполнить действие</button><button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>';
-    } else if (action === "open_account") {
-        document.getElementById('transferMoney').style.display = "none";
-        document.getElementById('creditConditions').style.display = "block"; // Показываем условия кредита
-        document.getElementById('openAccountButton').innerHTML = '<button type="submit" class="btn btn-primary btn-block">Выполнить действие</button><button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>';
-    } else {
-        document.getElementById('transferMoney').style.display = "none";
-        document.getElementById('creditConditions').style.display = "none";
-        document.getElementById('openAccountButton').innerHTML = '<button type="submit" class="btn btn-primary btn-block">Выполнить действие</button><button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>';
+    function executeAction() {
+        var action = document.getElementById('action').value;
+        switch (action) {
+            case 'open_account':
+                window.location.href = '/open_acc_credit';
+                break;
+            case 'close_account':
+                window.location.href = '/close_acc_credit';
+                break;
+            case 'send_money':
+                window.location.href = '/send_money_credit';
+                break;
+        }
     }
-});
-
 
     function goBack() {
         window.location.href = '/verif_main';
@@ -82,4 +78,3 @@
 </script>
 </body>
 </html>
-

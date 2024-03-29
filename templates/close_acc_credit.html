@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Открытие счета</title>
+    <title>Закрытие кредитного счета</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
@@ -23,32 +23,30 @@
 </head>
 <body>
 <div class="container">
-    <h2 class="text-center">Открытие счета</h2>
-    <form id="openAccountForm" method="POST" action="/debit">
+    <h2 class="text-center">Закрытие кредитного счета</h2>
+    <form id="closeAccountForm" method="POST" action="/credit">
         <div class="form-group">
             <label class="checkbox-label">
-                <input type="checkbox" id="agreeTerms" required>
-                Я прочитал(а) и согласен(на) с условиями открытия счета
+                <input type="checkbox" id="confirmClose" required>
+                Я подтверждаю, что хочу закрыть свой аккаунт. Это действие необратимо.
             </label>
         </div>
-        <!-- Hidden field for method -->
-        <input type="hidden" name="method" value="Openaccount">
-        <input type="hidden" name="kind_of_account" value="Debit">
-        <!-- End of hidden field -->
+        <input type="hidden" name="method" value="Closeaccount">
+        <input type="hidden" name="kind_of_account" value="Credit">
         <div class="form-group">
-            <button type="submit" class="btn btn-primary btn-block" disabled id="openButton">Открыть счет</button>
+            <button type="submit" class="btn btn-danger btn-block" disabled id="closeButton">Закрыть счет</button>
             <button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>
         </div>
     </form>
 </div>
 
 <script>
-    document.getElementById('agreeTerms').addEventListener('change', function() {
-        document.getElementById('openButton').disabled = !this.checked;
+    document.getElementById('confirmClose').addEventListener('change', function() {
+        document.getElementById('closeButton').disabled = !this.checked;
     });
 
     function goBack() {
-        window.location.href = '/debit';
+        window.location.href = '/credit';
     }
 </script>
 </body>

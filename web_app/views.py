@@ -65,3 +65,10 @@ def send_money_debit():
     with open("../templates/send_money_debit.html", encoding="utf-8") as template:
         return template.read()
 
+def open_acc_credit():
+    with open("../templates/open_acc_credit.html", encoding="utf-8") as template:
+        return template.read()
+
+def close_acc_credit():
+    with open("../templates/close_acc_credit.html", encoding="utf-8") as template:
+        return template.read()
