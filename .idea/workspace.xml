@@ -6,6 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="253dfc20-9b41-4621-9494-fafdc82f100e" name="Changes" comment="Работаем">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankAccount/BankAccount.py" beforeDir="false" afterPath="$PROJECT_DIR$/BankAccount/BankAccount.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankAccount/Methods/MethodCredit.py" beforeDir="false" afterPath="$PROJECT_DIR$/BankAccount/Methods/MethodCredit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankAccount/Methods/MethodDeposit.py" beforeDir="false" afterPath="$PROJECT_DIR$/BankAccount/Methods/MethodDeposit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankAccount/credit_accounts.db" beforeDir="false" afterPath="$PROJECT_DIR$/BankAccount/credit_accounts.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankAccount/debit_accounts.db" beforeDir="false" afterPath="$PROJECT_DIR$/BankAccount/debit_accounts.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Control/control.py" beforeDir="false" afterPath="$PROJECT_DIR$/Control/control.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/open_acc_credit.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/open_acc_credit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/send_money_credit.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/send_money_credit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_app/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app/app.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,6 +50,9 @@
         <option name="url" value="https://github.com/Quirence/QiwiBank.git" />
       </UrlAndAccount>
     </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
@@ -89,7 +101,6 @@
   <component name="RunManager">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="QiwiBank" />
-      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -257,7 +268,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="gaysex/Bugs" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -270,9 +293,5 @@
     <MESSAGE value="Логин форма сделана" />
     <MESSAGE value="Работаем" />
     <option name="LAST_COMMIT_MESSAGE" value="Работаем" />
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/QiwiBank$control.coverage" NAME="control Coverage Results" MODIFIED="1711689560186" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Control" />
-    <SUITE FILE_PATH="coverage/QiwiBank$app.coverage" NAME="app Coverage Results" MODIFIED="1711689966180" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app" />
   </component>
 </project>

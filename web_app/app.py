@@ -24,7 +24,12 @@ URLS = {
     "/deposit": deposit,
     "/open_acc_debit": open_acc_debit,
     "/close_acc_debit": close_acc_debit,
-    "/send_money_debit": send_money_debit
+    "/send_money_debit": send_money_debit,
+    "/open_acc_credit": open_acc_credit,
+    "/close_acc_credit": close_acc_credit,
+    "/open_acc_deposit": open_acc_deposit,
+    "/close_acc_deposit": close_acc_deposit,
+    "/send_money_credit": send_money_credit
 }
 
 POST_urls = {
@@ -37,6 +42,11 @@ POST_urls = {
     "/credit": credit,
     "/debit": debit,
     "/deposit": deposit,
+    "/open_acc_credit": open_acc_credit,
+    "/close_acc_credit": close_acc_credit,
+    "/open_acc_deposit": open_acc_deposit,
+    "/close_acc_deposit": close_acc_deposit,
+    "/send_money_credit": send_money_credit
 }
 
 
@@ -118,6 +128,8 @@ def generate_headers(method, url, session_id):
 def parse_request(request):
     lines = request.split("\r\n")
     first_line_parts = lines[0].split(" ")
+    if len(first_line_parts) < 2:
+        raise ValueError('Неправильно отформатированная строка запроса')
     method = first_line_parts[0]
     url = first_line_parts[1]
     version = first_line_parts[2] if len(first_line_parts) > 2 else None
@@ -160,6 +172,7 @@ def generate_content(code, url):
         return "<h1>405</h1><p>Method not allowed</p>"
     return URLS[url]()
 
+
 def generate_result(request):
     method, url, headers, data = parse_request(request)
     print(data)
@@ -194,7 +207,6 @@ def generate_result(request):
     return response
 
 
-
 def run():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -205,6 +217,7 @@ def run():
     while True:
         client_socket, addr = server_socket.accept()
         request = client_socket.recv(2048)
+        print(request.decode("UTF-8"))
         response = generate_result(request.decode("UTF-8"))
         client_socket.sendall(response)
         client_socket.close()

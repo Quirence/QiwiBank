@@ -129,7 +129,7 @@ class Control:
                 }
 
                 negative_request = {
-                    'kind_of_account': kind_of_account,
+                    'kind_of_account': 'Debit',
                     'request': 'GetMoney',
                     'IdentificationAccount': id_receiver,
                     'Money': amount

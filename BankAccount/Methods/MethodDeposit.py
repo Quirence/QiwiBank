@@ -26,8 +26,8 @@ class MethodDeposit:
                 StatusDeposit = request.get('StatusDeposit', 'DEFAULT')
                 PayTime = request.get('PayTime', 0)
                 Money = request.get('Money', 0)
-                TimeActive = request.get('TimeActive', int(datetime.now().strftime('%s')))
-                LastPayTime = request.get('LastPayTime', int(datetime.now().strftime('%s')))
+                TimeActive = request.get('TimeActive', datetime.now().strftime('%s'))
+                LastPayTime = request.get('LastPayTime', datetime.now().strftime('%s'))
                 TimeClose = int(TimeActive) + int(request.get('TimeClose', 0))
                 cursor.execute("INSERT INTO deposit_accounts VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                                (IdentificationAccount, Money, BIC, StatusDeposit, TimeActive, LastPayTime, PayTime, TimeClose))

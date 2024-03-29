@@ -25,8 +25,8 @@ class MethodCredit:
                 BIC = request.get('BIC', 'DEFAULT')
                 CreditLimit = request['CreditLimit']
                 Rank = request['Rank']
-                TimeActive = request.get('TimeActive', int(datetime.now().strftime('%s')))
-                LastPayTime = request.get('LastPayTime', int(datetime.now().strftime('%s')))
+                TimeActive = request.get('TimeActive', datetime.now().strftime('%s'))
+                LastPayTime = request.get('LastPayTime', datetime.now().strftime('%s'))
                 PayTime = request.get('PayTime', 0)
                 cursor.execute("INSERT INTO credit_accounts VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                                (IdentificationAccount, Money, BIC, CreditLimit, Rank, TimeActive, LastPayTime, PayTime))
@@ -39,13 +39,16 @@ class MethodCredit:
             cursor.execute("SELECT * FROM credit_accounts WHERE IdentificationAccount = ?",
                            (IdentificationAccount,))
             account = cursor.fetchone()
-            if account:
-                cursor.execute("DELETE FROM credit_accounts WHERE IdentificationAccount = ?",
-                               (IdentificationAccount,))
-                conn.commit()
-                print(f"Счет {IdentificationAccount} успешно закрыт.")
+            if account[1] >= 0:
+                if account:
+                    cursor.execute("DELETE FROM credit_accounts WHERE IdentificationAccount = ?",
+                                   (IdentificationAccount,))
+                    conn.commit()
+                    print(f"Счет {IdentificationAccount} успешно закрыт.")
+                else:
+                    print(f"Счет {IdentificationAccount} не найден.")
             else:
-                print(f"Счет {IdentificationAccount} не найден.")
+                print("Пожалуйста, погасите кредит")
 
     class GetMoney:
         def __call__(self, request, cursor, conn):
@@ -66,12 +69,12 @@ class MethodCredit:
         def __call__(self, request, cursor, conn):
             IdentificationAccount = request['IdentificationAccount']
             Money = request['Money']
-            CreditLimit = request['CreditLimit']
-            cursor.execute("SELECT Money FROM credit_accounts WHERE IdentificationAccount = ?",
+            cursor.execute("SELECT Money, CreditLimit FROM credit_accounts WHERE IdentificationAccount = ?",
                            (IdentificationAccount,))
             account = cursor.fetchone()
             if account:
                 CurrentMoney = account[0]
+                CreditLimit = account[1]
                 if CurrentMoney + CreditLimit >= Money:
                     cursor.execute("UPDATE credit_accounts SET Money = Money - ? WHERE IdentificationAccount = ?",
                                    (Money, IdentificationAccount))
@@ -120,10 +123,11 @@ class MethodCredit:
     class GetBalance:
         def __call__(self, request, cursor, conn):
             IdentificationAccount = request['IdentificationAccount']
-            cursor.execute("SELECT Money FROM credit_accounts WHERE IdentificationAccount = ?",
+            cursor.execute("SELECT Money, CreditLimit FROM credit_accounts WHERE IdentificationAccount = ?",
                            (IdentificationAccount,))
             money = cursor.fetchone()
             if money:
-                return int(money[0])
+                print('balance if')
+                return money[0]+money[1]
             else:
                 print('Счёта с указанными данными не существует.')
