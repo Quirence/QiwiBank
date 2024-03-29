@@ -28,67 +28,28 @@
                 <option value="send_money">Отправить деньги</option>
             </select>
         </div>
-        <div id="depositConditions" style="display: none;">
-            <p><strong>Условия депозита:</strong></p>
-            <p>Процентная ставка: 5%</p>
-            <p>Можно ли пополнять? Да</p>
-            <p>Можно ли снимать? Нет</p>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="agreeConditions" required>
-                <label class="form-check-label" for="agreeConditions">
-                    Я согласен с условиями
-                </label>
-            </div>
-        </div>
-        <div id="sendMoneyFields" style="display: none;">
-            <div class="form-group">
-                <label for="phoneNumber">Номер телефона</label>
-                <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" required>
-            </div>
-            <div class="form-group">
-                <label for="amount">Сумма</label>
-                <input type="number" class="form-control" id="amount" name="amount" min="10" required>
-            </div>
-        </div>
         <div id="openAccountButton">
-            <button type="button" class="btn btn-primary btn-block">Выполнить действие</button>
+            <button type="button" class="btn btn-primary btn-block" onclick="executeAction()">Выполнить действие</button>
             <button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>
         </div>
     </form>
 </div>
 
 <script>
-    document.getElementById('action').addEventListener('change', function() {
-        var action = this.value;
-        var backButton = document.getElementById('openAccountButton').querySelector('.btn-secondary');
-
-        if (action === "open_account") {
-            document.getElementById('depositConditions').style.display = "block";
-            document.getElementById('openAccountButton').innerHTML = '<button type="submit" class="btn btn-primary btn-block" disabled>Открыть счет</button>';
-            document.getElementById('sendMoneyFields').style.display = "none";
-            document.getElementById('openAccountButton').appendChild(backButton);
-        } else if (action === "send_money") {
-            document.getElementById('depositConditions').style.display = "none";
-            document.getElementById('openAccountButton').innerHTML = '<button type="submit" class="btn btn-primary btn-block">Выполнить действие</button>';
-            document.getElementById('sendMoneyFields').style.display = "block";
-            document.getElementById('openAccountButton').appendChild(backButton);
-        } else {
-            document.getElementById('depositConditions').style.display = "none";
-            document.getElementById('openAccountButton').innerHTML = '<button type="submit" class="btn btn-primary btn-block">Выполнить действие</button>';
-            document.getElementById('sendMoneyFields').style.display = "none";
-            document.getElementById('openAccountButton').appendChild(backButton);
+    function executeAction() {
+        var action = document.getElementById('action').value;
+        switch (action) {
+            case 'open_account':
+                window.location.href = '/open_acc_deposit';
+                break;
+            case 'close_account':
+                window.location.href = '/close_acc_deposit';
+                break;
+            case 'send_money':
+                window.location.href = '/send_money_deposit';
+                break;
         }
-    });
-
-    document.getElementById('agreeConditions').addEventListener('change', function () {
-        if (this.checked) {
-            document.querySelector('#openAccountButton button').removeAttribute('disabled');
-            document.getElementById('accountForm').action = "/open_account";
-        } else {
-            document.querySelector('#openAccountButton button').setAttribute('disabled', 'disabled');
-            document.getElementById('accountForm').action = "/manage_account";
-        }
-    });
+    }
 
     function goBack() {
         window.location.href = '/verif_main';

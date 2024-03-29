@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Закрытие депозитного счета</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+        }
+
+        .checkbox-label {
+            font-size: 0.9rem;
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="text-center">Закрытие депозитного счета</h2>
+    <form id="closeAccountForm" method="POST" action="/deposit">
+        <div class="form-group">
+            <label class="checkbox-label">
+                <input type="checkbox" id="confirmClose" required>
+                Я подтверждаю, что хочу закрыть свой депозитный счет. Это действие необратимо.
+            </label>
+        </div>
+        <input type="hidden" name="method" value="Closeaccount">
+        <input type="hidden" name="kind_of_account" value="Deposit">
+        <div class="form-group">
+            <button type="submit" class="btn btn-danger btn-block" disabled id="closeButton">Закрыть счет</button>
+            <button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('confirmClose').addEventListener('change', function() {
+        document.getElementById('closeButton').disabled = !this.checked;
+    });
+
+    function goBack() {
+        window.location.href = '/deposit';
+    }
+</script>
+</body>
+</html>

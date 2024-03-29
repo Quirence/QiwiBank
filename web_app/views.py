@@ -72,3 +72,15 @@ def open_acc_credit():
 def close_acc_credit():
     with open("../templates/close_acc_credit.html", encoding="utf-8") as template:
         return template.read()
+
+def open_acc_deposit():
+    with open("../templates/open_acc_deposit.html", encoding="utf-8") as template:
+        return template.read()
+
+def close_acc_deposit():
+    with open("../templates/close_acc_deposit.html", encoding="utf-8") as template:
+        return template.read()
+
+def send_money_credit():
+    with open("../templates/send_money_credit.html", encoding="utf-8") as template:
+        return template.read()

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Открытие кредитного счета</title>
+    <title>Открытие депозитного счета</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
@@ -19,33 +19,27 @@
             font-size: 0.9rem;
             font-weight: normal;
         }
-
-        .conditions {
-            margin-top: 20px;
-            border: 1px solid #ccc;
-            padding: 10px;
-            background-color: #fff;
-        }
     </style>
 </head>
 <body>
 <div class="container">
-    <h2 class="text-center">Открытие кредитного счета</h2>
+    <h2 class="text-center">Открытие депозитного счета</h2>
     <div class="alert alert-info" role="alert">
-        <strong>Условия открытия кредитного счёта:</strong><br>
-        <strong>Процентная ставка:</strong> 10%<br>
-        <strong>Лимит:</strong> 10000$<br>
+        <strong>Условия депозита:</strong><br>
+        <strong>Процентная ставка:</strong> 5%<br>
+        <strong>Можно ли пополнять?</strong> Да<br>
+        <strong>Можно ли снимать?</strong> Нет
     </div>
-    <form id="openCreditAccountForm" method="POST" action="/credit">
+    <form id="openAccountForm" method="POST" action="/deposit">
         <div class="form-group">
             <label class="checkbox-label">
                 <input type="checkbox" id="agreeTerms" required>
-                Я прочитал(а) и согласен(на) с условиями открытия кредитного счета
+                Я прочитал(а) и согласен(на) с условиями открытия счета
             </label>
         </div>
         <!-- Hidden field for method -->
         <input type="hidden" name="method" value="Openaccount">
-        <input type="hidden" name="kind_of_account" value="Credit">
+        <input type="hidden" name="kind_of_account" value="Deposit">
         <!-- End of hidden field -->
         <div class="form-group">
             <button type="submit" class="btn btn-primary btn-block" disabled id="openButton">Открыть счет</button>
@@ -60,7 +54,7 @@
     });
 
     function goBack() {
-        window.location.href = '/credit';
+        window.location.href = '/deposit';
     }
 </script>
 </body>
