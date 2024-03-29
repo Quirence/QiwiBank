@@ -201,11 +201,12 @@ def generate_result(request):
             headers = redirect_to(new_location, session_id, user_email)
             active_sessions[session_id] = {"start_time": time.time(), "email": user_email}
     session = active_sessions.get(session_id)
+    balance = "Счет не существует"
     if (url != "register" and url != "/login") and method == "POST":
         if data.get("method") == "Getbalance":
             control_response = control.treatment_request(data, session)
             balance = control_response.get("balance")
-            if balance:
+            if balance is None:
                 balance = "Счет не существует"
         control.treatment_request(data, session)
     if url == '/your_endpoint':
