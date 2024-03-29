@@ -30,8 +30,7 @@ class MethodDeposit:
                 LastPayTime = request.get('LastPayTime', datetime.now().strftime('%s'))
                 TimeClose = TimeActive + request.get('TimeClose', 0)
                 cursor.execute("INSERT INTO deposit_accounts VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                               (IdentificationAccount, Money, BIC, StatusDeposit, TimeActive, LastPayTime, PayTime,
-                                TimeClose))
+                               (IdentificationAccount, Money, BIC, StatusDeposit, TimeActive, LastPayTime, PayTime, TimeClose))
                 conn.commit()
                 print(f"Счет {IdentificationAccount} успешно открыт.")
 
@@ -51,7 +50,6 @@ class MethodDeposit:
                     print(f"Счет {IdentificationAccount} не найден.")
             else:
                 print('Депозит должен быть деактивирован, чтобы его возможно было закрыть.')
-
     class GetMoney:
         def __call__(self, request, cursor, conn):
             IdentificationAccount = request['IdentificationAccount']
@@ -180,4 +178,3 @@ class MethodDeposit:
                 return int(money[0])
             else:
                 print('Счёта с указанными данными не существует.')
-
