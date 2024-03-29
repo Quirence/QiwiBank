@@ -112,7 +112,7 @@ class Control:
                                    "request": "NumberGetID"}
             id_giver = self.user_analyzer(id_giver_request)
             id_receiver = self.user_analyzer(id_receiver_request)
-            if id_receiver is not None:
+            if id_receiver is not None and id_giver is not None:
                 kind_of_account = request["kind_of_account"]
                 amount = int(request["amount"])
                 id_balance_request = {
