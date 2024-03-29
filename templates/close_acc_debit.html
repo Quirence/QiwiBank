@@ -25,13 +25,15 @@
 <body>
 <div class="container">
     <h2 class="text-center">Закрытие счета</h2>
-    <form id="closeAccountForm" method="POST" action="/submit_close_acc">
+    <form id="closeAccountForm" method="POST" action="/debit">
         <div class="form-group">
             <label class="checkbox-label">
                 <input type="checkbox" id="confirmClose" required>
                 Я подтверждаю, что хочу закрыть свой аккаунт. Это действие необратимо.
             </label>
         </div>
+        <input type="hidden" name="method" value="Closeaccount">
+        <input type="hidden" name="kind_of_account" value="Debit">
         <div class="form-group">
             <button type="submit" class="btn btn-danger btn-block" disabled id="closeButton">Закрыть счет</button>
             <button type="button" class="btn btn-secondary btn-block" onclick="goBack()">Назад</button>
