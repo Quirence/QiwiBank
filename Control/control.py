@@ -10,7 +10,6 @@ class Control:
     def treatment_request(self, request, session):
         User.thread_local.cursor = self.user.cursor  # Устанавливаем cursor в thread-local переменной
         User.thread_local.conn = self.user.conn  # Устанавливаем conn в thread-local переменной
-        print(session["email"])
         return self.control_analyzer(request, session)
 
     class AnalyzeRequest:
@@ -79,6 +78,24 @@ class Control:
                 'StatusDeposit': 'ON'
             }
             bank_account.process_request(open_request)
+
+    class Closeaccount:
+
+        def __init__(self, user_analyzer):
+            self.user_analyzer = user_analyzer
+
+        def __call__(self, request, session):
+            email = session["email"]
+            kind_of_account = request["kind_of_account"]
+            id_user_request = {"email": email,
+                               "request": "GetID"}
+            id_user = self.user_analyzer(id_user_request)
+            close_request = {
+                'kind_of_account': kind_of_account,
+                'request': 'CloseAccount',
+                'IdentificationAccount': id_user,
+            }
+            bank_account.process_request(close_request)
     class Sendmoney:
         def __init__(self, user_analyzer):
             self.user_analyzer = user_analyzer
@@ -126,10 +143,17 @@ second_request = {
     'kind_of_account': 'Debit',
 }
 
+third_request = {
+    'method': 'Closeaccount',
+    'kind_of_account': 'Debit',
+}
+
 session1 = {
     "email": "bebra.hohol@gmail.com"
 }
 
 control = Control()
 control.treatment_request(first_request, session1)
+control.treatment_request(second_request, session1)
+control.treatment_request(third_request, session1)
 control.treatment_request(second_request, session1)

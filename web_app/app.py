@@ -4,6 +4,7 @@ from views import *
 from urllib.parse import unquote_plus
 from Control.control import *
 import time
+import json
 
 # Глобальные переменные
 HOST = ("localhost", 7777)
@@ -131,15 +132,25 @@ def parse_request(request):
         body = "\r\n".join(lines[index + 1:])
         data = {}
         if method == "POST":
-            params = body.split("&")
-            for param in params:
-                key, value = param.split("=")
-                data[unquote_plus(key)] = unquote_plus(value)
+            if 'Content-Type' in headers and 'application/json' in headers['Content-Type']:
+                try:
+                    data = json.loads(body)
+                except ValueError:
+                    pass  # Обработка недопустимого JSON при необходимости
+            else:
+                params = body.split("&")
+                for param in params:
+                    if '=' in param:
+                        key, value = param.split("=")
+                        data[unquote_plus(key)] = unquote_plus(value)
+                    else:
+                        data[unquote_plus(param)] = ""
         # Извлечение email из куки, если он есть
         if "Cookie" in headers:
             cookie = cookies.SimpleCookie(headers["Cookie"])
-            if "email" in cookie:
-                data["email"] = cookie["email"].value
+            for _, morsel in cookie.items():
+                if "email" in morsel.key:
+                    data["email"] = morsel.value
     return method, url, headers, data
 
 
@@ -198,4 +209,3 @@ def run():
 
 
 run()
-
