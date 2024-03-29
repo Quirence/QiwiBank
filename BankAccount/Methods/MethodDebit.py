@@ -85,3 +85,4 @@ class MethodDebit:
                 return int(money[0])
             else:
                 print("Счёта с указанными данными не существует.")
+                return None

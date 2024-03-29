@@ -99,6 +99,28 @@ class Control:
             }
             bank_account.process_request(close_request)
 
+    class Getbalance:
+
+        def __init__(self, user_analyzer):
+            self.user_analyzer = user_analyzer
+
+        def __call__(self, request, session):
+            email = session["email"]
+            kind_of_account = request["kind_of_account"]
+            id_user_request = {"email": email,
+                               "request": "GetID"}
+            id_user = self.user_analyzer(id_user_request)
+            if id_user is not None:
+                balance_request = {
+                    'IdentificationAccount': id_user,
+                    "request": "GetBalance",
+                    "kind_of_account": kind_of_account
+                }
+                balance = bank_account.process_request(balance_request)
+                return {"status": "success", "balance": balance}
+            else:
+                return {"status": "failed"}
+
     class Sendmoney:
         def __init__(self, user_analyzer):
             self.user_analyzer = user_analyzer
@@ -160,12 +182,17 @@ third_request = {
     'kind_of_account': 'Debit',
 }
 
+fourth_request = {
+    'method': 'Getbalance',
+    'kind_of_account': 'Debit',
+}
+
 session1 = {
     "email": "bebra.hohol@gmail.com"
 }
 
 # control = Control()
-# control.treatment_request(first_request, session1)
+# control.treatment_request(fourth_request, session1)
 # control.treatment_request(second_request, session1)
 # control.treatment_request(third_request, session1)
 # control.treatment_request(second_request, session1)
