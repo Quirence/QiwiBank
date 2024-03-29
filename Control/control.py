@@ -94,12 +94,12 @@ class Control:
             id_receiver = self.user_analyzer(id_receiver_request)
             if id_receiver is not None:
                 kind_of_account = request["kind_of_account"]
-                amount = request["amount"]
+                amount = int(request["amount"])
                 positive_request = {
                     'kind_of_account': kind_of_account,
                     'request': 'GiveMoney',
                     'IdentificationAccount': id_giver,
-                    'Money': int(amount)
+                    'Money': amount
                 }
 
                 negative_request = {

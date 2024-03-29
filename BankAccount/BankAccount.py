@@ -1,9 +1,8 @@
+import os
 import sqlite3
 from BankAccount.Methods.MethodDebit import MethodDebit
 from BankAccount.Methods.MethodCredit import MethodCredit
 from BankAccount.Methods.MethodDeposit import MethodDeposit
-
-
 
 class BankAccount:
     def __init__(self):
@@ -20,13 +19,13 @@ class BankAccount:
             treatment_request.treatment_request(request)
         except KeyError:
             print(f"Unsupported kind of account: {kind_of_account}. Supported types are: {list(self.accounts.keys())}")
-
         except AttributeError:
             print(f"Unsupported request type: {request['request']}")
 
     class Debit:
         def __init__(self):
-            self.conn = sqlite3.connect('debit_accounts.db')
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            self.conn = sqlite3.connect(os.path.join(current_dir, 'debit_accounts.db'))
             self.cursor = self.conn.cursor()
             self.create_table()
             self.analyzer = MethodDebit.AnalyzeRequest()
@@ -43,7 +42,8 @@ class BankAccount:
 
     class Credit:
         def __init__(self):
-            self.conn = sqlite3.connect('credit_accounts.db')
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            self.conn = sqlite3.connect(os.path.join(current_dir, 'credit_accounts.db'))
             self.cursor = self.conn.cursor()
             self.create_table()
             self.analyzer = MethodCredit.AnalyzeRequest()
@@ -65,7 +65,8 @@ class BankAccount:
 
     class Deposit:
         def __init__(self):
-            self.conn = sqlite3.connect('deposit_accounts.db')
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            self.conn = sqlite3.connect(os.path.join(current_dir, 'deposit_accounts.db'))
             self.cursor = self.conn.cursor()
             self.create_table()
             self.analyzer = MethodDeposit.AnalyzeRequest()
@@ -87,8 +88,8 @@ class BankAccount:
 
 
 bank_account = BankAccount()
-# Запрос на открытие депозитного счета
 
+# Запрос на открытие депозитного счета
 request = {
     'kind_of_account': 'Debit',
     'request': 'OpenAccount',
@@ -96,5 +97,3 @@ request = {
     'Money': 50,
     'BIC': 'ABC123'
 }
-
-# Вызов метода process_request с различными запросами
