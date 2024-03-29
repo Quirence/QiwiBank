@@ -26,9 +26,9 @@ class MethodDeposit:
                 StatusDeposit = request.get('StatusDeposit', 'DEFAULT')
                 PayTime = request.get('PayTime', 0)
                 Money = request.get('Money', 0)
-                TimeActive = request.get('TimeActive', datetime.now().strftime('%s'))
+                TimeActive = int(request.get('TimeActive', datetime.now().timestamp()))
                 LastPayTime = request.get('LastPayTime', datetime.now().strftime('%s'))
-                TimeClose = int(TimeActive) + int(request.get('TimeClose', 0))
+                TimeClose = TimeActive + request.get('TimeClose', 0)
                 cursor.execute("INSERT INTO deposit_accounts VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                                (IdentificationAccount, Money, BIC, StatusDeposit, TimeActive, LastPayTime, PayTime, TimeClose))
                 conn.commit()
@@ -40,14 +40,16 @@ class MethodDeposit:
             cursor.execute("SELECT * FROM deposit_accounts WHERE IdentificationAccount = ?",
                            (IdentificationAccount,))
             account = cursor.fetchone()
-            if account:
-                cursor.execute("DELETE FROM deposit_accounts WHERE IdentificationAccount = ?",
-                               (IdentificationAccount,))
-                conn.commit()
-                print(f"Счет {IdentificationAccount} успешно закрыт.")
+            if account[3]!='ON':
+                if account:
+                        cursor.execute("DELETE FROM deposit_accounts WHERE IdentificationAccount = ?",
+                                       (IdentificationAccount,))
+                        conn.commit()
+                        print(f"Счет {IdentificationAccount} успешно закрыт.")
+                else:
+                    print(f"Счет {IdentificationAccount} не найден.")
             else:
-                print(f"Счет {IdentificationAccount} не найден.")
-
+                print('Депозит должен быть деактивирован, чтобы его возможно было закрыть.')
     class GetMoney:
         def __call__(self, request, cursor, conn):
             IdentificationAccount = request['IdentificationAccount']

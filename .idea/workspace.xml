@@ -6,15 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="253dfc20-9b41-4621-9494-fafdc82f100e" name="Changes" comment="Работаем">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankAccount/BankAccount.py" beforeDir="false" afterPath="$PROJECT_DIR$/BankAccount/BankAccount.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankAccount/Methods/MethodCredit.py" beforeDir="false" afterPath="$PROJECT_DIR$/BankAccount/Methods/MethodCredit.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BankAccount/Methods/MethodDeposit.py" beforeDir="false" afterPath="$PROJECT_DIR$/BankAccount/Methods/MethodDeposit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankAccount/credit_accounts.db" beforeDir="false" afterPath="$PROJECT_DIR$/BankAccount/credit_accounts.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankAccount/debit_accounts.db" beforeDir="false" afterPath="$PROJECT_DIR$/BankAccount/debit_accounts.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Control/control.py" beforeDir="false" afterPath="$PROJECT_DIR$/Control/control.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/open_acc_credit.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/open_acc_credit.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/send_money_credit.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/send_money_credit.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/web_app/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BankAccount/deposit_accounts.db" beforeDir="false" afterPath="$PROJECT_DIR$/BankAccount/deposit_accounts.db" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

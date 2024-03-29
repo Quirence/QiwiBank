@@ -25,7 +25,6 @@
                 <option value="" selected disabled hidden>Выберите действие</option>
                 <option value="open_account">Открыть депозит</option>
                 <option value="close_account">Закрыть счет</option>
-                <option value="send_money">Отправить деньги</option>
             </select>
         </div>
         <div id="openAccountButton">
@@ -44,9 +43,6 @@
                 break;
             case 'close_account':
                 window.location.href = '/close_acc_deposit';
-                break;
-            case 'send_money':
-                window.location.href = '/send_money_deposit';
                 break;
         }
     }
