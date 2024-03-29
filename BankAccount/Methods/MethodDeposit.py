@@ -3,7 +3,6 @@ from datetime import datetime
 
 
 class MethodDeposit:
-
     class AnalyzeRequest:
         def __call__(self, request, cursor, conn):
             request_type = request['request']
@@ -12,6 +11,7 @@ class MethodDeposit:
                 return method(request, cursor, conn)
             except AttributeError:
                 print(f"Unsupported request type: {request_type}")
+                return False
 
     class OpenAccount:
         def __call__(self, request, cursor, conn):
@@ -30,7 +30,8 @@ class MethodDeposit:
                 LastPayTime = request.get('LastPayTime', datetime.now().strftime('%s'))
                 TimeClose = TimeActive + request.get('TimeClose', 0)
                 cursor.execute("INSERT INTO deposit_accounts VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                               (IdentificationAccount, Money, BIC, StatusDeposit, TimeActive, LastPayTime, PayTime, TimeClose))
+                               (IdentificationAccount, Money, BIC, StatusDeposit, TimeActive, LastPayTime, PayTime,
+                                TimeClose))
                 conn.commit()
                 print(f"Счет {IdentificationAccount} успешно открыт.")
 
@@ -40,16 +41,17 @@ class MethodDeposit:
             cursor.execute("SELECT * FROM deposit_accounts WHERE IdentificationAccount = ?",
                            (IdentificationAccount,))
             account = cursor.fetchone()
-            if account[3]!='ON':
+            if account[3] != 'ON':
                 if account:
-                        cursor.execute("DELETE FROM deposit_accounts WHERE IdentificationAccount = ?",
-                                       (IdentificationAccount,))
-                        conn.commit()
-                        print(f"Счет {IdentificationAccount} успешно закрыт.")
+                    cursor.execute("DELETE FROM deposit_accounts WHERE IdentificationAccount = ?",
+                                   (IdentificationAccount,))
+                    conn.commit()
+                    print(f"Счет {IdentificationAccount} успешно закрыт.")
                 else:
                     print(f"Счет {IdentificationAccount} не найден.")
             else:
                 print('Депозит должен быть деактивирован, чтобы его возможно было закрыть.')
+
     class GetMoney:
         def __call__(self, request, cursor, conn):
             IdentificationAccount = request['IdentificationAccount']
@@ -62,8 +64,10 @@ class MethodDeposit:
                                (Money, IdentificationAccount))
                 conn.commit()
                 print(f"Сумма {Money} успешно зачислена на счет {IdentificationAccount}.")
+                return True
             else:
                 print(f"Счет {IdentificationAccount} не найден.")
+                return False
 
     class GiveMoney:
         def __call__(self, request, cursor, conn):
@@ -80,13 +84,17 @@ class MethodDeposit:
                                        (Money, IdentificationAccount))
                         conn.commit()
                         print(f"Сумма {Money} успешно списана со счета {IdentificationAccount}.")
+                        return True
                     else:
                         print(f"Недостаточно средств на счете {IdentificationAccount}.")
+                        return False
                 else:
                     print(
                         f"Списание средств с депозита {IdentificationAccount} невозможно, так как статус депозита: {StatusDeposit}.")
+                    return False
             else:
                 print(f"Счет {IdentificationAccount} не найден.")
+                return False
 
     class SetOn:
         def __call__(self, request, cursor, conn):
@@ -117,17 +125,6 @@ class MethodDeposit:
                 print(f"Статус депозита для счета {IdentificationAccount} успешно изменен на 'OFF'.")
             elif current_status and current_status[0] == 'OFF':
                 print(f"Статус депозита для счета {IdentificationAccount} уже установлен как 'OFF'.")
-            else:
-                print(f"Счет {IdentificationAccount} не найден.")
-
-    class GetBalance:
-        def __call__(self, request, cursor, conn):
-            IdentificationAccount = request['IdentificationAccount']
-            cursor.execute("SELECT Money FROM deposit_accounts WHERE IdentificationAccount = ?",
-                           (IdentificationAccount,))
-            account = cursor.fetchone()
-            if account:
-                print(f"Баланс на счете {IdentificationAccount} составляет {account[0]}.")
             else:
                 print(f"Счет {IdentificationAccount} не найден.")
 

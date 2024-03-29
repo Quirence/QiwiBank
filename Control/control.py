@@ -157,8 +157,10 @@ class Control:
                     'Money': amount
                 }
                 if balance_giver >= amount:
-                    bank_account.process_request(positive_request)
-                    bank_account.process_request(negative_request)
+                    if bank_account.process_request(negative_request):
+                        bank_account.process_request(positive_request)
+                    else:
+                        print("У получателя не открыт дебетовый счет.")
                 else:
                     print("Недостаточно средств на вашем счету.")
             else:

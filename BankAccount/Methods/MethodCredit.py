@@ -11,6 +11,7 @@ class MethodCredit:
                 return method(request, cursor, conn)
             except AttributeError:
                 print(f"Unsupported request type: {request_type}")
+                return False
 
     class OpenAccount:
         def __call__(self, request, cursor, conn):
@@ -62,8 +63,10 @@ class MethodCredit:
                                (Money, IdentificationAccount))
                 conn.commit()
                 print(f"Сумма {Money} успешно зачислена на счет {IdentificationAccount}.")
+                return True
             else:
                 print(f"Счет {IdentificationAccount} не найден.")
+                return False
 
     class GiveMoney:
         def __call__(self, request, cursor, conn):
@@ -80,10 +83,13 @@ class MethodCredit:
                                    (Money, IdentificationAccount))
                     conn.commit()
                     print(f"Сумма {Money} успешно списана со счета {IdentificationAccount}.")
+                    return True
                 else:
                     print(f"Недостаточно средств на счете {IdentificationAccount}.")
+                    return False
             else:
                 print(f"Счет {IdentificationAccount} не найден.")
+                return False
 
     class PayCredit:
         def __call__(self, request, cursor, conn):
