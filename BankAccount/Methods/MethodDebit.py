@@ -7,7 +7,7 @@ class MethodDebit:
             request_type = request['request']
             try:
                 method = getattr(MethodDebit, request_type)()
-                method(request, cursor, conn)
+                return method(request, cursor, conn)
             except AttributeError:
                 print(f"Unsupported request type: {request_type}")
 
@@ -82,6 +82,6 @@ class MethodDebit:
             money = cursor.fetchone()
             if money:
                 # Возвращаем баланс в виде строки
-                return str(money[0])
+                return int(money[0])
             else:
                 print("Счёта с указанными данными не существует.")

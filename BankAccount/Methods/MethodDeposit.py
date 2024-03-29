@@ -9,7 +9,7 @@ class MethodDeposit:
             request_type = request['request']
             try:
                 method = getattr(MethodDeposit, request_type)()
-                method(request, cursor, conn)
+                return method(request, cursor, conn)
             except AttributeError:
                 print(f"Unsupported request type: {request_type}")
 
@@ -173,7 +173,7 @@ class MethodDeposit:
                            (IdentificationAccount,))
             money = cursor.fetchone()
             if money:
-                return money
+                return int(money[0])
             else:
                 print('Счёта с указанными данными не существует.')
 

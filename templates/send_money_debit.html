@@ -22,15 +22,15 @@
     <form id="sendMoneyForm" method="POST" action="/command">
         <div class="form-group">
             <label for="phoneNumber">Номер получателя</label>
-            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Введите номер получателя" required>
+            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Введите номер получателя" value="+79025780706" required>
         </div>
         <div class="form-group">
             <label for="amount">Сумма перевода</label>
-            <input type="number" class="form-control" id="amount" name="amount" placeholder="Введите сумму для перевода" min="10" required>
+            <input type="number" class="form-control" id="amount" name="amount" placeholder="Введите сумму для перевода" value="100" min="10" required>
         </div>
         <!-- Hidden fields -->
-        <input type="hidden" name="method" value="sendmoney">
-        <input type="hidden" name="kind_of_account" value="debit">
+        <input type="hidden" name="method" value="Sendmoney">
+        <input type="hidden" name="kind_of_account" value="Debit">
         <!-- End of hidden fields -->
         <div class="form-group">
             <button type="submit" class="btn btn-success btn-block">Перевести деньги</button>
@@ -41,11 +41,8 @@
 
 <script>
     function goBack() {
-        window.location.href = '/command';
+        window.location.href = '/debit';
     }
 </script>
 </body>
 </html>
-
-
-

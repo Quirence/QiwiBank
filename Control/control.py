@@ -1,13 +1,14 @@
 from database.UserMethod import *
 from BankAccount.BankAccount import bank_account
 
+
 class Control:
     def __init__(self):
         self.user = User()
         self.user_analyzer = User.AnalyzeRequest()
         self.control_analyzer = self.AnalyzeRequest(self.user_analyzer)
 
-    def treatment_request(self, request, session):
+    def treatment_request(self, request, session=None):
         User.thread_local.cursor = self.user.cursor  # Устанавливаем cursor в thread-local переменной
         User.thread_local.conn = self.user.conn  # Устанавливаем conn в thread-local переменной
         return self.control_analyzer(request, session)
@@ -47,9 +48,10 @@ class Control:
             new_request['request'] = 'GetPassword'
             password = request['password']
             stored_password = self.user_analyzer(new_request)
+            email = request["email"]
             if stored_password == password:
                 print("Authentication successful.")
-                return {'status': 'success', 'redirect': '/main'}  # Redirect to the main page
+                return {'status': 'success', 'redirect': '/main', "email": email}  # Redirect to the main page
             else:
                 print("Incorrect password or email.")
                 return {'status': 'failed'}
@@ -63,7 +65,7 @@ class Control:
             email = session["email"]
             kind_of_account = request["kind_of_account"]
             id_user_request = {"email": email,
-                                "request": "GetID"}
+                               "request": "GetID"}
             id_user = self.user_analyzer(id_user_request)
             open_request = {
                 'kind_of_account': kind_of_account,
@@ -96,6 +98,7 @@ class Control:
                 'IdentificationAccount': id_user,
             }
             bank_account.process_request(close_request)
+
     class Sendmoney:
         def __init__(self, user_analyzer):
             self.user_analyzer = user_analyzer
@@ -112,6 +115,12 @@ class Control:
             if id_receiver is not None:
                 kind_of_account = request["kind_of_account"]
                 amount = int(request["amount"])
+                id_balance_request = {
+                    'kind_of_account': kind_of_account,
+                    'request': 'GetBalance',
+                    'IdentificationAccount': id_giver
+                }
+                balance_giver = bank_account.process_request(id_balance_request)
                 positive_request = {
                     'kind_of_account': kind_of_account,
                     'request': 'GiveMoney',
@@ -125,8 +134,11 @@ class Control:
                     'IdentificationAccount': id_receiver,
                     'Money': amount
                 }
-                bank_account.process_request(positive_request)
-                bank_account.process_request(negative_request)
+                if balance_giver >= amount:
+                    bank_account.process_request(positive_request)
+                    bank_account.process_request(negative_request)
+                else:
+                    print("Недостаточно средств на вашем счету.")
             else:
                 return {'status': 'failed'}
 
@@ -152,8 +164,8 @@ session1 = {
     "email": "bebra.hohol@gmail.com"
 }
 
-control = Control()
-control.treatment_request(first_request, session1)
-control.treatment_request(second_request, session1)
-control.treatment_request(third_request, session1)
-control.treatment_request(second_request, session1)
+# control = Control()
+# control.treatment_request(first_request, session1)
+# control.treatment_request(second_request, session1)
+# control.treatment_request(third_request, session1)
+# control.treatment_request(second_request, session1)

@@ -4,6 +4,7 @@ from BankAccount.Methods.MethodDebit import MethodDebit
 from BankAccount.Methods.MethodCredit import MethodCredit
 from BankAccount.Methods.MethodDeposit import MethodDeposit
 
+
 class BankAccount:
     def __init__(self):
         self.accounts = {
@@ -16,7 +17,7 @@ class BankAccount:
         kind_of_account = request['kind_of_account']
         try:
             treatment_request = self.accounts[kind_of_account]
-            treatment_request.treatment_request(request)
+            return treatment_request.treatment_request(request)  # Возвращаем результат обработки запроса
         except KeyError:
             print(f"Unsupported kind of account: {kind_of_account}. Supported types are: {list(self.accounts.keys())}")
         except AttributeError:
@@ -38,7 +39,7 @@ class BankAccount:
             self.conn.commit()
 
         def treatment_request(self, request):
-            self.analyzer(request, self.cursor, self.conn)
+            return self.analyzer(request, self.cursor, self.conn)
 
     class Credit:
         def __init__(self):
@@ -61,7 +62,7 @@ class BankAccount:
             self.conn.commit()
 
         def treatment_request(self, request):
-            self.analyzer(request, self.cursor, self.conn)
+            return self.analyzer(request, self.cursor, self.conn)
 
     class Deposit:
         def __init__(self):
@@ -84,7 +85,7 @@ class BankAccount:
             self.conn.commit()
 
         def treatment_request(self, request):
-            self.analyzer(request, self.cursor, self.conn)
+            return self.analyzer(request, self.cursor, self.conn)
 
 
 bank_account = BankAccount()

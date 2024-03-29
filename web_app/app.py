@@ -17,7 +17,6 @@ URLS = {
     "/login": login,
     "/main": main,
     "/register": register,
-    "/command": command,
     "/verification": verification,
     "/verif_main": verif_main,
     "/credit": credit,
@@ -31,7 +30,13 @@ URLS = {
 POST_urls = {
     "/login": login,
     "/register": register,
-    "/command": command
+    "/command": command,
+    "/open_acc_debit": open_acc_debit,
+    "/close_acc_debit": close_acc_debit,
+    "/send_money_debit": send_money_debit,
+    "/credit": credit,
+    "/debit": debit,
+    "/deposit": deposit,
 }
 
 
@@ -83,7 +88,7 @@ def generate_headers(method, url, session_id):
         return redirect_to(new_location, session_id), 302
 
     if url == "/login" and method == "POST":
-        new_location = "http://localhost:7777/command"  # Перенаправляем на /command после успешной аутентификации
+        new_location = "http://localhost:7777/verif_main"  # Перенаправляем на /command после успешной аутентификации
         return redirect_to(new_location, session_id), 302
 
     if url == "/register" and method == "POST":
@@ -145,12 +150,6 @@ def parse_request(request):
                         data[unquote_plus(key)] = unquote_plus(value)
                     else:
                         data[unquote_plus(param)] = ""
-        # Извлечение email из куки, если он есть
-        if "Cookie" in headers:
-            cookie = cookies.SimpleCookie(headers["Cookie"])
-            for _, morsel in cookie.items():
-                if "email" in morsel.key:
-                    data["email"] = morsel.value
     return method, url, headers, data
 
 
@@ -160,7 +159,6 @@ def generate_content(code, url):
     if code == 405:
         return "<h1>405</h1><p>Method not allowed</p>"
     return URLS[url]()
-
 
 def generate_result(request):
     method, url, headers, data = parse_request(request)
@@ -176,21 +174,25 @@ def generate_result(request):
 
     headers, code = generate_headers(method, url, session_id)
     if (url == '/register' or url == '/login') and method == "POST":
-        session = {
-            "email": "bebra.hohol@gmail.com",
-            "session_id": "something"
-        }
-        control_response = control.treatment_request(data, session)
+        if url == '/register' and method == "POST":
+            control_response = control.treatment_request(data)
+        else:
+            control_response = control.treatment_request(data)
+
         if control_response is not None and control_response.get('status') == 'success':
             user_email = control_response.get('email')
             session_id = generate_session_id()
             new_location = "/verif_main"
             headers = redirect_to(new_location, session_id, user_email)
             active_sessions[session_id] = {"start_time": time.time(), "email": user_email}
+    session = active_sessions.get(session_id)
+    if (url != "register" and url != "/login") and method == "POST":
+        control_response = control.treatment_request(data, session)
 
     body = generate_content(code, url)
     response = (headers + body).encode()
     return response
+
 
 
 def run():
