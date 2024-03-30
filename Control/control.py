@@ -143,39 +143,50 @@ class Control:
                     'IdentificationAccount': id_giver
                 }
                 balance_giver = bank_account.process_request(id_balance_request)
-                positive_request = {
-                    'kind_of_account': kind_of_account,
-                    'request': 'GiveMoney',
-                    'IdentificationAccount': id_giver,
-                    'Money': amount
-                }
+                if balance_giver:
+                    positive_request = {
+                        'kind_of_account': kind_of_account,
+                        'request': 'GiveMoney',
+                        'IdentificationAccount': id_giver,
+                        'Money': amount
+                    }
 
-                negative_request = {
-                    'kind_of_account': 'Debit',
-                    'request': 'GetMoney',
-                    'IdentificationAccount': id_receiver,
-                    'Money': amount
-                }
-                try:
-                    if balance_giver[0] >= amount and balance_giver[1] == 'OFF':
-                        if bank_account.process_request(negative_request):
-                            bank_account.process_request(positive_request)
+                    negative_request = {
+                        'kind_of_account': 'Debit',
+                        'request': 'GetMoney',
+                        'IdentificationAccount': id_receiver,
+                        'Money': amount
+                    }
+                    if kind_of_account == 'Deposit':
+                        if balance_giver[0] >= amount and balance_giver[1] == 'OFF':
+                            if bank_account.process_request(negative_request):
+                                bank_account.process_request(positive_request)
+                            else:
+                                print("У получателя не открыт дебетовый счет.")
                         else:
-                            print("У получателя не открыт дебетовый счет.")
-                    else:
-                        if balance_giver[1] == 'ON':
-                            print(
-                                f"Перевод денег с депозитного счёта не возможен, т.к. его состояние = {balance_giver[1]}")
+                            if balance_giver[1] == 'ON':
+                                print(
+                                    f"Перевод денег с депозитного счёта не возможен, т.к. его состояние = {balance_giver[1]}")
+                            else:
+                                print("Недостаточно средств на вашем счету.")
+                    elif kind_of_account == 'Debit':
+                        if balance_giver >= amount:
+                            if bank_account.process_request(negative_request):
+                                bank_account.process_request(positive_request)
+                            else:
+                                print("У получателя не открыт дебетовый счет.")
                         else:
                             print("Недостаточно средств на вашем счету.")
-                except:
-                    if balance_giver >= amount:
-                        if bank_account.process_request(negative_request):
-                            bank_account.process_request(positive_request)
+                    elif kind_of_account == 'Credit':
+                        if balance_giver[0] + balance_giver[1] >= amount:
+                            if bank_account.process_request(negative_request):
+                                bank_account.process_request(positive_request)
+                            else:
+                                print("У получателя не открыт дебетовый счет.")
                         else:
-                            print("У получателя не открыт дебетовый счет.")
-                    else:
-                        print("Недостаточно средств на вашем счету.")
+                            print("Недостаточно средств на вашем счету.")
+                else:
+                    print('Счёт отправителя не существует.')
             else:
                 return {'status': 'failed'}
 
