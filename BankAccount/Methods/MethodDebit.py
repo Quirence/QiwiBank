@@ -87,7 +87,6 @@ class MethodDebit:
                            (IdentificationAccount,))
             money = cursor.fetchone()
             if money:
-                # Возвращаем баланс в виде строки
                 return int(money[0])
             else:
                 print("Счёта с указанными данными не существует.")

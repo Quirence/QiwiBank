@@ -168,10 +168,11 @@ class MethodDeposit:
     class GetBalance:
         def __call__(self, request, cursor, conn):
             IdentificationAccount = request['IdentificationAccount']
-            cursor.execute("SELECT Money, StatusDeposit FROM deposit_accounts WHERE IdentificationAccount = ?",
+            cursor.execute("SELECT Money FROM deposit_accounts WHERE IdentificationAccount = ?",
                            (IdentificationAccount,))
             money = cursor.fetchone()
             if money:
-                return int(money[0]), str(money[1])
+                return int(money[0])
             else:
-                print('Счёта с указанными данными не существует.')
+                return None
+
