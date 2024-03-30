@@ -1,5 +1,6 @@
 from database.UserMethod import *
 from BankAccount.BankAccount import bank_account
+from Control.Requests import *
 
 
 class Control:
@@ -7,6 +8,7 @@ class Control:
         self.user = User()
         self.user_analyzer = User.AnalyzeRequest()
         self.control_analyzer = self.AnalyzeRequest(self.user_analyzer)
+        self.request = Requests()
 
     def treatment_request(self, request, session=None):
         User.thread_local.cursor = self.user.cursor  # Устанавливаем cursor в thread-local переменной
@@ -62,23 +64,9 @@ class Control:
             self.user_analyzer = user_analyzer
 
         def __call__(self, request, session):
-            email = session["email"]
-            kind_of_account = request["kind_of_account"]
-            id_user_request = {"email": email,
-                               "request": "GetID"}
+            id_user_request = request.id_user_request(session)
             id_user = self.user_analyzer(id_user_request)
-            open_request = {
-                'kind_of_account': kind_of_account,
-                'request': 'OpenAccount',
-                'IdentificationAccount': id_user,
-                'Money': 1000,
-                'BIC': 'ABC123',
-                'Rank': 'AAA',
-                'CreditLimit': 5000,
-                'PayTime': 5,
-                'TimeClose': 10,
-                'StatusDeposit': 'ON'
-            }
+            open_request = request.open_request(request, id_user)
             bank_account.process_request(open_request)
 
     class Closeaccount:
@@ -87,16 +75,9 @@ class Control:
             self.user_analyzer = user_analyzer
 
         def __call__(self, request, session):
-            email = session["email"]
-            kind_of_account = request["kind_of_account"]
-            id_user_request = {"email": email,
-                               "request": "GetID"}
+            id_user_request = request.id_user_request(session)
             id_user = self.user_analyzer(id_user_request)
-            close_request = {
-                'kind_of_account': kind_of_account,
-                'request': 'CloseAccount',
-                'IdentificationAccount': id_user,
-            }
+            close_request = request.close_request(request, id_user)
             bank_account.process_request(close_request)
 
     class Getbalance:
@@ -105,17 +86,10 @@ class Control:
             self.user_analyzer = user_analyzer
 
         def __call__(self, request, session):
-            email = session["email"]
-            kind_of_account = request["kind_of_account"]
-            id_user_request = {"email": email,
-                               "request": "GetID"}
+            id_user_request = request.id_user_request(session)
             id_user = self.user_analyzer(id_user_request)
             if id_user is not None:
-                balance_request = {
-                    'IdentificationAccount': id_user,
-                    "request": "GetBalance",
-                    "kind_of_account": kind_of_account
-                }
+                balance_request = request.balance_request(request, id_user)
                 balance = bank_account.process_request(balance_request)
                 return {"status": "success", "balance": balance}
             else:
@@ -126,69 +100,24 @@ class Control:
             self.user_analyzer = user_analyzer
 
         def __call__(self, request, session):
-            email = session["email"]
-            number = request['phoneNumber']
-            id_giver_request = {"email": email,
-                                "request": "GetID"}
-            id_receiver_request = {"number": number,
-                                   "request": "NumberGetID"}
+            id_giver_request = request.id_user_request(session)
+            id_receiver_request = request.id_number_user_request(request)
             id_giver = self.user_analyzer(id_giver_request)
             id_receiver = self.user_analyzer(id_receiver_request)
-            if id_receiver is not None and id_giver is not None:
-                kind_of_account = request["kind_of_account"]
+            if all((id_receiver, id_giver)):
                 amount = int(request["amount"])
-                id_balance_request = {
-                    'kind_of_account': kind_of_account,
-                    'request': 'GetBalance',
-                    'IdentificationAccount': id_giver
-                }
+                id_balance_request = request.id_balance_request(request, id_giver)
                 balance_giver = bank_account.process_request(id_balance_request)
                 if balance_giver:
-                    positive_request = {
-                        'kind_of_account': kind_of_account,
-                        'request': 'GiveMoney',
-                        'IdentificationAccount': id_giver,
-                        'Money': amount
-                    }
-
-                    negative_request = {
-                        'kind_of_account': 'Debit',
-                        'request': 'GetMoney',
-                        'IdentificationAccount': id_receiver,
-                        'Money': amount
-                    }
-                    if kind_of_account == 'Deposit':
-                        if balance_giver[0] >= amount and balance_giver[1] == 'OFF':
-                            if bank_account.process_request(negative_request):
-                                bank_account.process_request(positive_request)
-                            else:
-                                print("У получателя не открыт дебетовый счет.")
-                        else:
-                            if balance_giver[1] == 'ON':
-                                print(
-                                    f"Перевод денег с депозитного счёта не возможен, т.к. его состояние = {balance_giver[1]}")
-                            else:
-                                print("Недостаточно средств на вашем счету.")
-                    elif kind_of_account == 'Debit':
-                        if balance_giver >= amount:
-                            if bank_account.process_request(negative_request):
-                                bank_account.process_request(positive_request)
-                            else:
-                                print("У получателя не открыт дебетовый счет.")
-                        else:
-                            print("Недостаточно средств на вашем счету.")
-                    elif kind_of_account == 'Credit':
-                        if balance_giver[0] + balance_giver[1] >= amount:
-                            if bank_account.process_request(negative_request):
-                                bank_account.process_request(positive_request)
-                            else:
-                                print("У получателя не открыт дебетовый счет.")
-                        else:
-                            print("Недостаточно средств на вашем счету.")
+                    if balance_giver >= amount:
+                        giver_request = request.giver_request(request, id_giver)
+                        receiver_request = request.receiver_request(request, id_receiver)
+                        bank_account.process_request(receiver_request)
+                        bank_account.process_request(giver_request)
                 else:
-                    print('Счёт отправителя не существует.')
+                    print(f"Недостаточно средств на вашем счету")
             else:
-                return {'status': 'failed'}
+                print(f"Счет получателя не найден")
 
 
 first_request = {
