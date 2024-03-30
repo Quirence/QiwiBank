@@ -156,13 +156,26 @@ class Control:
                     'IdentificationAccount': id_receiver,
                     'Money': amount
                 }
-                if balance_giver >= amount:
-                    if bank_account.process_request(negative_request):
-                        bank_account.process_request(positive_request)
+                try:
+                    if balance_giver[0] >= amount and balance_giver[1] == 'OFF':
+                        if bank_account.process_request(negative_request):
+                            bank_account.process_request(positive_request)
+                        else:
+                            print("У получателя не открыт дебетовый счет.")
                     else:
-                        print("У получателя не открыт дебетовый счет.")
-                else:
-                    print("Недостаточно средств на вашем счету.")
+                        if balance_giver[1] == 'ON':
+                            print(
+                                f"Перевод денег с депозитного счёта не возможен, т.к. его состояние = {balance_giver[1]}")
+                        else:
+                            print("Недостаточно средств на вашем счету.")
+                except:
+                    if balance_giver >= amount:
+                        if bank_account.process_request(negative_request):
+                            bank_account.process_request(positive_request)
+                        else:
+                            print("У получателя не открыт дебетовый счет.")
+                    else:
+                        print("Недостаточно средств на вашем счету.")
             else:
                 return {'status': 'failed'}
 

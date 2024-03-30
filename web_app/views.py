@@ -88,3 +88,7 @@ def close_acc_deposit():
 def send_money_credit():
     with open("../templates/send_money_credit.html", encoding="utf-8") as template:
         return template.read()
+
+def send_money_deposit():
+    with open("../templates/send_money_deposit.html", encoding="utf-8") as template:
+        return template.read()

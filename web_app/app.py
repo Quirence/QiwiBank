@@ -30,7 +30,8 @@ URLS = {
     "/open_acc_deposit": open_acc_deposit,
     "/close_acc_deposit": close_acc_deposit,
     "/send_money_credit": send_money_credit,
-    '/your_endpoint': 0
+    '/your_endpoint': 0,
+    "/send_money_deposit": send_money_deposit
 }
 
 POST_urls = {
@@ -47,7 +48,8 @@ POST_urls = {
     "/close_acc_credit": close_acc_credit,
     "/open_acc_deposit": open_acc_deposit,
     "/close_acc_deposit": close_acc_deposit,
-    "/send_money_credit": send_money_credit
+    "/send_money_credit": send_money_credit,
+    "/send_money_deposit": send_money_deposit
 }
 
 
