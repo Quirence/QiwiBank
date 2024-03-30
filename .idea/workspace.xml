@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="253dfc20-9b41-4621-9494-fafdc82f100e" name="Changes" comment="КНОПКА ГОТОВА">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankAccount/Methods/MethodDebit.py" beforeDir="false" afterPath="$PROJECT_DIR$/BankAccount/Methods/MethodDebit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BankAccount/debit_accounts.db" beforeDir="false" afterPath="$PROJECT_DIR$/BankAccount/debit_accounts.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Control/Requests.py" beforeDir="false" afterPath="$PROJECT_DIR$/Control/Requests.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Control/control.py" beforeDir="false" afterPath="$PROJECT_DIR$/Control/control.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_app/app.py" beforeDir="false" />
-    </list>
+    <list default="true" id="253dfc20-9b41-4621-9494-fafdc82f100e" name="Changes" comment="Сервер готов" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -280,7 +273,15 @@
       <option name="project" value="LOCAL" />
       <updated>1711735903160</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Сервер готов">
+      <option name="closed" value="true" />
+      <created>1711822076306</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1711822076306</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -316,7 +317,8 @@
     <MESSAGE value="Логин форма сделана" />
     <MESSAGE value="Работаем" />
     <MESSAGE value="КНОПКА ГОТОВА" />
-    <option name="LAST_COMMIT_MESSAGE" value="КНОПКА ГОТОВА" />
+    <MESSAGE value="Сервер готов" />
+    <option name="LAST_COMMIT_MESSAGE" value="Сервер готов" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/QiwiBank$control.coverage" NAME="control Coverage Results" MODIFIED="1711821498883" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Control" />
