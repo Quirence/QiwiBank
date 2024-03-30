@@ -2,13 +2,14 @@ from database.UserMethod import *
 from BankAccount.BankAccount import bank_account
 from Control.Requests import *
 
+get_request = Requests()
+
 
 class Control:
     def __init__(self):
         self.user = User()
         self.user_analyzer = User.AnalyzeRequest()
         self.control_analyzer = self.AnalyzeRequest(self.user_analyzer)
-        self.request = Requests()
 
     def treatment_request(self, request, session=None):
         User.thread_local.cursor = self.user.cursor  # Устанавливаем cursor в thread-local переменной
@@ -64,9 +65,9 @@ class Control:
             self.user_analyzer = user_analyzer
 
         def __call__(self, request, session):
-            id_user_request = request.id_user_request(session)
+            id_user_request = get_request.id_user_request(session)
             id_user = self.user_analyzer(id_user_request)
-            open_request = request.open_request(request, id_user)
+            open_request = get_request.open_request(request, id_user)
             bank_account.process_request(open_request)
 
     class Closeaccount:
@@ -75,9 +76,9 @@ class Control:
             self.user_analyzer = user_analyzer
 
         def __call__(self, request, session):
-            id_user_request = request.id_user_request(session)
+            id_user_request = get_request.id_user_request(session)
             id_user = self.user_analyzer(id_user_request)
-            close_request = request.close_request(request, id_user)
+            close_request = get_request.close_request(request, id_user)
             bank_account.process_request(close_request)
 
     class Getbalance:
@@ -86,10 +87,10 @@ class Control:
             self.user_analyzer = user_analyzer
 
         def __call__(self, request, session):
-            id_user_request = request.id_user_request(session)
+            id_user_request = get_request.id_user_request(session)
             id_user = self.user_analyzer(id_user_request)
             if id_user is not None:
-                balance_request = request.balance_request(request, id_user)
+                balance_request = get_request.balance_request(request, id_user)
                 balance = bank_account.process_request(balance_request)
                 return {"status": "success", "balance": balance}
             else:
@@ -100,18 +101,19 @@ class Control:
             self.user_analyzer = user_analyzer
 
         def __call__(self, request, session):
-            id_giver_request = request.id_user_request(session)
-            id_receiver_request = request.id_number_user_request(request)
+            id_giver_request = get_request.id_user_request(session)
+            id_receiver_request = get_request.id_number_user_request(request)
+            print(id_giver_request, id_receiver_request)
             id_giver = self.user_analyzer(id_giver_request)
             id_receiver = self.user_analyzer(id_receiver_request)
             if all((id_receiver, id_giver)):
                 amount = int(request["amount"])
-                id_balance_request = request.id_balance_request(request, id_giver)
+                id_balance_request = get_request.id_balance_request(request, id_giver)
                 balance_giver = bank_account.process_request(id_balance_request)
                 if balance_giver:
                     if balance_giver >= amount:
-                        giver_request = request.giver_request(request, id_giver)
-                        receiver_request = request.receiver_request(request, id_receiver)
+                        giver_request = get_request.giver_request(request, id_giver)
+                        receiver_request = get_request.receiver_request(request, id_receiver)
                         bank_account.process_request(receiver_request)
                         bank_account.process_request(giver_request)
                 else:

@@ -61,12 +61,12 @@ class MethodDebit:
     class GiveMoney:
         def __call__(self, request, cursor, conn):
             IdentificationAccount = request['IdentificationAccount']
-            Money = request['Money']
+            Money = int(request['Money'])
             cursor.execute("SELECT Money FROM debit_accounts WHERE IdentificationAccount = ?",
                            (IdentificationAccount,))
             account = cursor.fetchone()
             if account:
-                CurrentMoney = account[0]
+                CurrentMoney = int(account[0])
                 if CurrentMoney >= Money:
                     cursor.execute("UPDATE debit_accounts SET Money = Money - ? WHERE IdentificationAccount = ?",
                                    (Money, IdentificationAccount))

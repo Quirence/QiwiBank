@@ -4,7 +4,7 @@ class Requests:
         return {"email": email, "request": "GetID"}
 
     def id_number_user_request(self, request):
-        return {"email": request['phoneNumber'], "request": "NumberGetID"}
+        return {"number": request['phoneNumber'], "request": "NumberGetID"}
 
     def open_request(self, request, id_user):
         return {
