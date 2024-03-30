@@ -90,7 +90,6 @@
             })
         }).then(response => response.text())
           .then(data => {
-              // Обновляем содержимое элемента с id "balanceDisplay" на странице
               document.getElementById('balanceDisplay').innerHTML = "<strong>Баланс:</strong> " + data;
           })
           .catch(error => {

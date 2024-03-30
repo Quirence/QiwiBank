@@ -12,8 +12,8 @@ class Control:
         self.control_analyzer = self.AnalyzeRequest(self.user_analyzer)
 
     def treatment_request(self, request, session=None):
-        User.thread_local.cursor = self.user.cursor  # Устанавливаем cursor в thread-local переменной
-        User.thread_local.conn = self.user.conn  # Устанавливаем conn в thread-local переменной
+        User.thread_local.cursor = self.user.cursor
+        User.thread_local.conn = self.user.conn
         return self.control_analyzer(request, session)
 
     class AnalyzeRequest:
@@ -29,7 +29,7 @@ class Control:
                 print(f"Unsupported request type: {request_type}")
 
     class Registration:
-        def __init__(self, user_analyzer):  # Ensure this argument is passed correctly
+        def __init__(self, user_analyzer):
             self.user_analyzer = user_analyzer
 
         def __call__(self, request, session=None):
@@ -37,7 +37,7 @@ class Control:
             new_request['request'] = 'AddUser'
             if self.user_analyzer(new_request):
                 print("Registration successful.")
-                return {'status': 'success', 'redirect': '/'}  # Redirect to the main page
+                return {'status': 'success', 'redirect': '/'}
             else:
                 print("Registration failed blyat.")
                 return {'status': 'failed'}
@@ -54,12 +54,11 @@ class Control:
             email = request["email"]
             if stored_password == password:
                 print("Authentication successful.")
-                return {'status': 'success', 'redirect': '/main', "email": email}  # Redirect to the main page
+                return {'status': 'success', 'redirect': '/main', "email": email}
             else:
                 print("Incorrect password or email.")
                 return {'status': 'failed'}
 
-    # {'action': 'send_money', 'phoneNumber': '+79025780706', 'amount': '100'}
     class Openaccount:
         def __init__(self, user_analyzer):
             self.user_analyzer = user_analyzer
@@ -147,7 +146,7 @@ fourth_request = {
 session1 = {
     "email": "bebra.hohol@gmail.com"
 }
-
+# Для readme - здесь можно проверить, как control реагирует на запросы из интерфейса (вручную)
 control = Control()
 # control.treatment_request(fourth_request, session1)
 # control.treatment_request(second_request, session1)

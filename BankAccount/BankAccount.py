@@ -17,7 +17,7 @@ class BankAccount:
         kind_of_account = request['kind_of_account']
         try:
             treatment_request = self.accounts[kind_of_account]
-            return treatment_request.treatment_request(request)  # Возвращаем результат обработки запроса
+            return treatment_request.treatment_request(request)
         except KeyError:
             print(f"Unsupported kind of account: {kind_of_account}. Supported types are: {list(self.accounts.keys())}.")
         except AttributeError:

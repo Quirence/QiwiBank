@@ -57,7 +57,6 @@
             event.preventDefault();
             document.getElementById('passwordHelp').classList.remove('d-none');
         } else {
-            // Удаляем поле confirmpassword из данных перед отправкой формы
             document.getElementById('registrationForm').removeChild(document.getElementById('confirmPassword').parentNode);
         }
     });

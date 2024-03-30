@@ -71,10 +71,8 @@
     function redirectToAccount() {
         var selectedOption = document.getElementById('accountType').value;
         if (selectedOption === '/local_send_money') {
-            // Перенаправить на страницу перевода между счетами
             window.location.href = '/local_send_money';
         } else if (selectedOption) {
-            // Перенаправить на выбранный счет
             window.location.href = selectedOption;
         }
     }

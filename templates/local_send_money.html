@@ -112,7 +112,6 @@ function refreshBalance(accountType) {
         })
     }).then(response => response.text())
       .then(data => {
-          // Обновляем содержимое элемента с id "BalanceDisplay" на странице
           document.getElementById(accountType + 'BalanceDisplay').innerHTML = "<strong>" + accountType + " Баланс:</strong> " + data;
       })
       .catch(error => {
@@ -131,12 +130,10 @@ function submitTransfer() {
     var toAccount = document.getElementById('toAccount').value;
     var amount = document.getElementById('amount').value;
 
-    // Ваша логика для отправки данных на сервер и выполнения перевода
 
     alert("Перевод выполнен успешно: " + amount + "$ с " + fromAccount + " на " + toAccount);
 }
 
-// Вызываем функцию обновления балансов сразу после загрузки DOM
 document.addEventListener("DOMContentLoaded", function(event) {
     updateBalances();
 });
