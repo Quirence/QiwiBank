@@ -31,7 +31,8 @@ URLS = {
     "/close_acc_deposit": close_acc_deposit,
     "/send_money_credit": send_money_credit,
     '/your_endpoint': 0,
-    "/send_money_deposit": send_money_deposit
+    "/send_money_deposit": send_money_deposit,
+    "/local_send_money": local_send_money
 }
 
 POST_urls = {

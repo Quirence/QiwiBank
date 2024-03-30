@@ -55,12 +55,13 @@
 <div class="container">
     <h2>QIWI BANK</h2>
     <div class="form-group">
-        <label for="accountType">ВЫБЕРИТЕ ТИП СЧЕТА</label>
+        <label for="accountType">ВЫБЕРИТЕ ДЕЙСТВИЕ</label>
         <select class="form-control" name="accountType" id="accountType" required>
-            <option value="" selected disabled hidden>Выберите тип счета</option>
-            <option value="http://localhost:7777/debit">Дебетовый счет</option>
-            <option value="http://localhost:7777/credit">Кредитный счет</option>
-            <option value="http://localhost:7777/deposit">Депозитный счет</option>
+            <option value="" selected disabled hidden>Выберите действие</option>
+            <option value="http://localhost:7777/debit">Открыть дебетовый счет</option>
+            <option value="http://localhost:7777/credit">Открыть кредитный счет</option>
+            <option value="http://localhost:7777/deposit">Открыть депозитный счет</option>
+            <option value="/local_send_money">Перевести между счетами</option>
         </select>
     </div>
     <button type="button" onclick="redirectToAccount()" class="btn btn-primary btn-block">Выбрать</button>
@@ -69,7 +70,11 @@
 <script>
     function redirectToAccount() {
         var selectedOption = document.getElementById('accountType').value;
-        if (selectedOption) {
+        if (selectedOption === '/local_send_money') {
+            // Перенаправить на страницу перевода между счетами
+            window.location.href = '/local_send_money';
+        } else if (selectedOption) {
+            // Перенаправить на выбранный счет
             window.location.href = selectedOption;
         }
     }

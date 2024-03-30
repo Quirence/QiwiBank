@@ -92,3 +92,7 @@ def send_money_credit():
 def send_money_deposit():
     with open("../templates/send_money_deposit.html", encoding="utf-8") as template:
         return template.read()
+
+def local_send_money():
+    with open("../templates/local_send_money.html", encoding="utf-8") as template:
+        return template.read()
