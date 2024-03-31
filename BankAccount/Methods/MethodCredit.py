@@ -141,4 +141,4 @@ class MethodCredit:
                 return money[0], money[1]
             else:
                 print('Счёта с указанными данными не существует.')
-                return {"status": "failed"}
+                return None

@@ -9,7 +9,6 @@ class Logs:
         self.conn = sqlite3.connect(db_file)
         self.cursor = self.conn.cursor()
         self.create_table()
-        self.last_cleanup_time = datetime.now()
 
     def create_table(self):
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS logs
@@ -17,6 +16,7 @@ class Logs:
                                 request TEXT,
                                 response TEXT,
                                 session TEXT,
+                                cleanup_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                 timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
         self.conn.commit()
 
@@ -32,12 +32,25 @@ class Logs:
         else:
             return None, None, None
 
+    def get_last_cleanup_timestamp(self):
+        self.cursor.execute("SELECT cleanup_timestamp FROM logs ORDER BY id DESC LIMIT 1")
+        row = self.cursor.fetchone()
+        if row:
+            return datetime.fromisoformat(row[0])
+        else:
+            return datetime.now()
+
+    def set_last_cleanup_timestamp(self, timestamp):
+        self.cursor.execute("UPDATE logs SET cleanup_timestamp = ?", (timestamp,))
+        self.conn.commit()
+
     def cleanup_database(self):
         current_time = datetime.now()
-        if current_time - self.last_cleanup_time >= timedelta(weeks=1):
+        last_cleanup_time = self.get_last_cleanup_timestamp()
+        if current_time - last_cleanup_time >= timedelta(weeks=1):
             self.cursor.execute("DELETE FROM logs WHERE timestamp <= ?", (current_time - timedelta(weeks=1),))
             self.conn.commit()
-            self.last_cleanup_time = current_time
+            self.set_last_cleanup_timestamp(current_time)
 
     def close(self):
         self.conn.close()
