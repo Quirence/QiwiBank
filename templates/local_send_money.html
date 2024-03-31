@@ -130,8 +130,24 @@ function submitTransfer() {
     var toAccount = document.getElementById('toAccount').value;
     var amount = document.getElementById('amount').value;
 
-
-    alert("Перевод выполнен успешно: " + amount + "$ с " + fromAccount + " на " + toAccount);
+    fetch('/transfer', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            method: 'Selfsend',
+            from_kind_of_account: fromAccount,
+            to_kind_of_account: toAccount,
+            amount: amount
+        })
+    }).then(response => {
+        if (!response.ok) {
+            console.error('Ошибка при переводе.');
+        }
+    }).catch(error => {
+        console.error('Ошибка при переводе:', error);
+    });
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
@@ -141,7 +157,3 @@ document.addEventListener("DOMContentLoaded", function(event) {
 </script>
 </body>
 </html>
-
-
-
-

@@ -27,7 +27,7 @@ class MethodDeposit:
                 PayTime = request.get('PayTime', 0)
                 Money = request.get('Money', 0)
                 TimeActive = int(request.get('TimeActive', datetime.now().timestamp()))
-                LastPayTime = request.get('LastPayTime', datetime.now().strftime('%s'))
+                LastPayTime = request.get('LastPayTime', datetime.now().strftime('%S'))
                 TimeClose = TimeActive + request.get('TimeClose', 0)
                 Percent = request.get('Percent', 0)
                 cursor.execute("INSERT INTO deposit_accounts VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -145,7 +145,7 @@ class MethodDeposit:
                 "Money,"
                 "Percent FROM deposit_accounts")
             accounts = cursor.fetchall()
-            current_time = int(datetime.now().strftime('%s'))
+            current_time = int(datetime.now().strftime('%S'))
             for account in accounts:
                 IdentificationAccount, TimeActive, LastPayTime, PayTime, TimeClose, StatusDeposit, Money, Percent = account
                 if StatusDeposit == 'ON':
@@ -162,8 +162,6 @@ class MethodDeposit:
                         print(f"Ваш депозитный счет {IdentificationAccount} успешно закрыт")
                 else:
                     print(f"Депозит {IdentificationAccount} не активен.")
-            else:
-                print(f"Счет {IdentificationAccount} не найден.")
 
     class GetBalance:
         def __call__(self, request, cursor, conn):

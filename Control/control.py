@@ -1,8 +1,6 @@
 from database.UserMethod import *
 from BankAccount.BankAccount import bank_account
 from Control.Requests import *
-import schedule
-import time
 
 get_request = Requests()
 
@@ -19,11 +17,8 @@ class Control:
         return self.control_analyzer(request, session)
 
     def start_payment_scheduler(self):
-        schedule.every(1).minutes.do(self.PayCredit)
-        schedule.every(1).minutes.do(self.PayDeposit)
-        while True:
-            schedule.run_pending()
-            time.sleep(1)
+        self.pay_credit()
+        self.pay_deposit()
 
     class AnalyzeRequest:
         def __init__(self, user_analyzer):
@@ -119,16 +114,21 @@ class Control:
                 amount = int(request["amount"])
                 id_balance_request = get_request.id_balance_request(request, id_giver)
                 balance_giver = bank_account.process_request(id_balance_request)
-                if balance_giver:
-                    if balance_giver >= amount:
-                        giver_request = get_request.giver_request(request, id_giver)
-                        receiver_request = get_request.receiver_request(request, id_receiver)
-                        if bank_account.process_request(receiver_request).get("status") == "success":
+                limit = balance_giver
+                if type(balance_giver) is tuple:
+                    limit = balance_giver[1]
+                    balance_giver = balance_giver[0]
+                if balance_giver and amount <= limit:
+                    giver_request = get_request.giver_request(request, id_giver)
+                    receiver_request = get_request.receiver_request(request, id_receiver)
+                    if bank_account.process_request(receiver_request).get("status") == "success":
+                        if bank_account.process_request(giver_request).get("status") == "failed":
+                            giver_request["kind_of_account"] = receiver_request["kind_of_account"]
                             bank_account.process_request(giver_request)
-                        else:
-                            print("Счет получателя не найден")
-                            return {"status": "failed"}
-                        return {"status": "success", "id_giver": id_giver, "id_receiver": id_receiver, "amount": amount}
+                    else:
+                        print("Счет получателя не найден")
+                        return {"status": "failed"}
+                    return {"status": "success", "id_giver": id_giver, "id_receiver": id_receiver, "amount": amount}
                 else:
                     print(f"Недостаточно средств на вашем счету")
                     return {"status": "failed"}
@@ -136,28 +136,51 @@ class Control:
                 print(f"Пользователя с таким номером не существует")
                 return {"status": "failed"}
 
-    class PayCredit:
+    class Selfsend:
+        def __init__(self, user_analyzer):
+            self.user_analyzer = user_analyzer
+
         def __call__(self, request, session):
-            pay_credit_request = get_request.pay_credit_request()
-            bank_account.process_request(pay_credit_request)
+            id_user_request = get_request.id_user_request(session)
+            id_user = self.user_analyzer(id_user_request)
+            id_balance_request = get_request.id_balance_from_request(request, id_user)
+            balance = bank_account.process_request(id_balance_request)
+            limit = balance
+            if type(balance) is tuple:
+                limit = balance[1]
+                balance = balance[0]
+            amount = request["amount"]
+            if amount == "":
+                amount = 0
+            else:
+                amount = int(amount)
+            if balance and (amount <= limit):
+                giver_request = get_request.from_giver_request(request, id_user)
+                receiver_request = get_request.to_receiver_request(request, id_user)
+                if bank_account.process_request(receiver_request).get("status") == "success":
+                    if bank_account.process_request(giver_request).get("status") == "failed":
+                        giver_request["kind_of_account"] = request["to_kind_of_account"]
+                        bank_account.process_request(giver_request)
+                        return {"status": "failed"}
+                else:
+                    print("У вас не открыт счет, на который вы переводите")
+                    return {"status": "failed"}
+                return {"status": "success", "amount": amount}
+            else:
+                print(f"Недостаточно средств на счету, с которого вы переводите")
+                return {"status": "failed"}
+            pass
 
-    class PayDeposit:
-        def __call__(self, request, session):
-            pay_deposit_request = get_request.pay_deposit_request()
-            bank_account.process_request(pay_deposit_request)
+    @staticmethod
+    def pay_credit():
+        pay_credit_request = get_request.pay_credit_request()
+        bank_account.process_request(pay_credit_request)
 
+    @staticmethod
+    def pay_deposit():
+        pay_deposit_request = get_request.pay_deposit_request()
+        bank_account.process_request(pay_deposit_request)
 
-first_request = {
-    'method': 'Openaccount',
-    'kind_of_account': 'Debit',
-}
-
-second_request = {
-    'method': 'Sendmoney',
-    'phoneNumber': '+79025780706',
-    'amount': '100',
-    'kind_of_account': 'Debit',
-}
 
 third_request = {
     'method': 'Closeaccount',
@@ -173,8 +196,8 @@ session1 = {
     "email": "bebra.hohol@gmail.com"
 }
 # Для readme - здесь можно проверить, как control реагирует на запросы из интерфейса (вручную)
-control = Control()
-# control.treatment_request(fourth_request, session1)
+# control = Control()
+# control.treatment_request(first_request, session1)
 # control.treatment_request(second_request, session1)
 # control.treatment_request(third_request, session1)
 # control.treatment_request(second_request, session1)

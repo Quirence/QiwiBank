@@ -1,7 +1,9 @@
 import socket
 from response import ResponseGenerator
+import multiprocessing
 
 HOST = ("localhost", 7777)
+
 
 def run():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -16,9 +18,10 @@ def run():
         response = ResponseGenerator.generate_result(request.decode("UTF-8"))
         client_socket.sendall(response)
         client_socket.close()
-        #ResponseGenerator().auto_update()
 
 
 if __name__ == "__main__":
-    run()
-
+    process1 = multiprocessing.Process(target=run)
+    process2 = multiprocessing.Process(target=ResponseGenerator.auto_update)
+    process1.start()
+    process2.start()

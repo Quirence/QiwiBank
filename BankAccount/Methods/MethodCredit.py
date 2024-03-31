@@ -26,8 +26,8 @@ class MethodCredit:
                 BIC = request.get('BIC', 'DEFAULT')
                 CreditLimit = request['CreditLimit']
                 Rank = request['Rank']
-                TimeActive = request.get('TimeActive', datetime.now().strftime('%s'))
-                LastPayTime = request.get('LastPayTime', datetime.now().strftime('%s'))
+                TimeActive = request.get('TimeActive', datetime.now().strftime('%S'))
+                LastPayTime = request.get('LastPayTime', datetime.now().strftime('%S'))
                 PayTime = request.get('PayTime', 0)
                 Percent = request.get('Percent', 0)  # Добавляем получение процента из запроса
                 cursor.execute("INSERT INTO credit_accounts VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -77,7 +77,7 @@ class MethodCredit:
     class GiveMoney:
         def __call__(self, request, cursor, conn):
             IdentificationAccount = request['IdentificationAccount']
-            Money = request['Money']
+            Money = int(request['Money'])
             cursor.execute("SELECT Money, CreditLimit FROM credit_accounts WHERE IdentificationAccount = ?",
                            (IdentificationAccount,))
             account = cursor.fetchone()
@@ -102,7 +102,7 @@ class MethodCredit:
             cursor.execute(
                 "SELECT IdentificationAccount, TimeActive, LastPayTime, PayTime, Money, Percent FROM credit_accounts")
             accounts = cursor.fetchall()
-            current_time = int(datetime.now().strftime('%s'))
+            current_time = int(datetime.now().strftime('%S'))
             for account in accounts:
                 IdentificationAccount, TimeActive, LastPayTime, PayTime, Balance, Percent = account
                 if Balance < 0:
