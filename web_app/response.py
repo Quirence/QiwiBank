@@ -30,7 +30,7 @@ URLS = {
     "/open_acc_deposit": open_acc_deposit,
     "/close_acc_deposit": close_acc_deposit,
     "/send_money_credit": send_money_credit,
-    '/your_endpoint': 0,
+    '/balance': 0,
     "/send_money_deposit": send_money_deposit,
     "/local_send_money": local_send_money
 }
@@ -202,8 +202,9 @@ class ResponseGenerator:
                 balance = control_response.get("balance")
                 if balance is None:
                     balance = "Счет не существует"
-            control.treatment_request(data, session)
-        if url == '/your_endpoint':
+            else:
+                control.treatment_request(data, session)
+        if url == '/balance':
             response_body = f"<p>{balance}</p>"
         else:
             response_body = ResponseGenerator.generate_content(code, url)
