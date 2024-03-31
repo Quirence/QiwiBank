@@ -39,7 +39,7 @@ class Control:
                 print("Registration successful.")
                 return {'status': 'success', 'redirect': '/'}
             else:
-                print("Registration failed blyat.")
+                print("Registration failed")
                 return {'status': 'failed'}
 
     class Login:

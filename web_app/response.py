@@ -186,11 +186,8 @@ class ResponseGenerator:
 
         headers, code = ResponseGenerator.generate_headers(method, url, session_id)
         if (url == '/register' or url == '/login') and method == "POST":
-            if url == '/register' and method == "POST":
-                control_response = control.treatment_request(data)
-            else:
-                control_response = control.treatment_request(data)
-
+            control_response = control.treatment_request(data)
+            print(control_response)
             if control_response is not None and control_response.get('status') == 'success':
                 user_email = control_response.get('email')
                 session_id = ResponseGenerator.generate_session_id()
@@ -199,7 +196,7 @@ class ResponseGenerator:
                 active_sessions[session_id] = {"start_time": time.time(), "email": user_email}
         session = active_sessions.get(session_id)
         balance = "Счет не существует"
-        if (url != "register" and url != "/login") and method == "POST":
+        if (url != "/register" and url != "/login") and method == "POST":
             if data.get("method") == "Getbalance":
                 control_response = control.treatment_request(data, session)
                 balance = control_response.get("balance")
