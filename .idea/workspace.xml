@@ -163,7 +163,7 @@
       <workItem from="1711824054980" duration="158000" />
       <workItem from="1711824220786" duration="82000" />
       <workItem from="1711825905032" duration="2000" />
-      <workItem from="1711871427418" duration="6481000" />
+      <workItem from="1711871427418" duration="7875000" />
     </task>
     <task id="LOCAL-00001" summary="Updated">
       <option name="closed" value="true" />
@@ -349,7 +349,23 @@
       <option name="project" value="LOCAL" />
       <updated>1711876639408</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Сервер готов">
+      <option name="closed" value="true" />
+      <created>1711878275023</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1711878275023</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Сервер готов">
+      <option name="closed" value="true" />
+      <created>1711878405137</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1711878405137</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -393,6 +409,6 @@
     <SUITE FILE_PATH="coverage/QiwiBank$response.coverage" NAME="response Coverage Results" MODIFIED="1711872661616" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app" />
     <SUITE FILE_PATH="coverage/QiwiBank$logs.coverage" NAME="logs Coverage Results" MODIFIED="1711875484507" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/logs" />
     <SUITE FILE_PATH="coverage/QiwiBank$app.coverage" NAME="app Coverage Results" MODIFIED="1711871699125" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app" />
-    <SUITE FILE_PATH="coverage/QiwiBank$server.coverage" NAME="server Coverage Results" MODIFIED="1711877326872" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app" />
+    <SUITE FILE_PATH="coverage/QiwiBank$server.coverage" NAME="server Coverage Results" MODIFIED="1711879716471" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web_app" />
   </component>
 </project>
