@@ -11,7 +11,7 @@ class MethodCredit:
                 return method(request, cursor, conn)
             except AttributeError:
                 print(f"Unsupported request type: {request_type}")
-                return False
+                return {"status": "failed"}
 
     class OpenAccount:
         def __call__(self, request, cursor, conn):
@@ -21,6 +21,7 @@ class MethodCredit:
             account = cursor.fetchone()
             if account:
                 print(f"Аккаунт с идентификационным номером {IdentificationAccount} уже существует.")
+                return {"status": "failed"}
             else:
                 Money = request.get('Money', 0)
                 BIC = request.get('BIC', 'DEFAULT')
@@ -33,6 +34,7 @@ class MethodCredit:
                                (IdentificationAccount, Money, BIC, CreditLimit, Rank, TimeActive, LastPayTime, PayTime))
                 conn.commit()
                 print(f"Счет {IdentificationAccount} успешно открыт.")
+                return {"status": "success"}
 
     class CloseAccount:
         def __call__(self, request, cursor, conn):
@@ -46,10 +48,13 @@ class MethodCredit:
                                    (IdentificationAccount,))
                     conn.commit()
                     print(f"Счет {IdentificationAccount} успешно закрыт.")
+                    return {"status": "success"}
                 else:
                     print(f"Счет {IdentificationAccount} не найден.")
+                    return {"status": "failed"}
             else:
                 print("Пожалуйста, погасите кредит")
+                return {"status": "failed"}
 
     class GetMoney:
         def __call__(self, request, cursor, conn):
@@ -63,10 +68,10 @@ class MethodCredit:
                                (Money, IdentificationAccount))
                 conn.commit()
                 print(f"Сумма {Money} успешно зачислена на счет {IdentificationAccount}.")
-                return True
+                return {"status": "success"}
             else:
                 print(f"Счет {IdentificationAccount} не найден.")
-                return False
+                return {"status": "failed"}
 
     class GiveMoney:
         def __call__(self, request, cursor, conn):
@@ -83,13 +88,13 @@ class MethodCredit:
                                    (Money, IdentificationAccount))
                     conn.commit()
                     print(f"Сумма {Money} успешно списана со счета {IdentificationAccount}.")
-                    return True
+                    return {"status": "success"}
                 else:
                     print(f"Недостаточно средств на счете {IdentificationAccount}.")
-                    return False
+                    return {"status": "failed"}
             else:
                 print(f"Счет {IdentificationAccount} не найден.")
-                return False
+                return {"status": "failed"}
 
     class PayCredit:
         def __call__(self, request, cursor, conn):
@@ -136,3 +141,4 @@ class MethodCredit:
                 return money[0], money[1]
             else:
                 print('Счёта с указанными данными не существует.')
+                return {"status": "failed"}

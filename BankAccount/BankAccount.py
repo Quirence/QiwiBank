@@ -20,8 +20,10 @@ class BankAccount:
             return treatment_request.treatment_request(request)
         except KeyError:
             print(f"Unsupported kind of account: {kind_of_account}. Supported types are: {list(self.accounts.keys())}.")
+            return {"status": "failed"}
         except AttributeError:
             print(f"Unsupported request type: {request['request']}")
+            return {"status": "failed"}
 
     class Debit:
         def __init__(self):

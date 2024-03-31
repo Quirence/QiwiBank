@@ -37,7 +37,7 @@ class Control:
             new_request['request'] = 'AddUser'
             if self.user_analyzer(new_request):
                 print("Registration successful.")
-                return {'status': 'success', 'redirect': '/'}
+                return {'status': 'success'}
             else:
                 print("Registration failed")
                 return {'status': 'failed'}
@@ -54,7 +54,7 @@ class Control:
             email = request["email"]
             if stored_password == password:
                 print("Authentication successful.")
-                return {'status': 'success', 'redirect': '/main', "email": email}
+                return {'status': 'success', "email": email}
             else:
                 print("Incorrect password or email.")
                 return {'status': 'failed'}
@@ -67,7 +67,8 @@ class Control:
             id_user_request = get_request.id_user_request(session)
             id_user = self.user_analyzer(id_user_request)
             open_request = get_request.open_request(request, id_user)
-            bank_account.process_request(open_request)
+            response = bank_account.process_request(open_request)
+            return response
 
     class Closeaccount:
 
@@ -78,7 +79,8 @@ class Control:
             id_user_request = get_request.id_user_request(session)
             id_user = self.user_analyzer(id_user_request)
             close_request = get_request.close_request(request, id_user)
-            bank_account.process_request(close_request)
+            response = bank_account.process_request(close_request)
+            return response
 
     class Getbalance:
 
@@ -91,9 +93,9 @@ class Control:
             if id_user is not None:
                 balance_request = get_request.balance_request(request, id_user)
                 balance = bank_account.process_request(balance_request)
-                return {"status": "success", "balance": balance}
-            else:
-                return {"status": "failed"}
+                if balance is not None:
+                    return {"status": "success", "balance": balance}
+            return {"status": "failed"}
 
     class Sendmoney:
         def __init__(self, user_analyzer):
@@ -102,7 +104,6 @@ class Control:
         def __call__(self, request, session):
             id_giver_request = get_request.id_user_request(session)
             id_receiver_request = get_request.id_number_user_request(request)
-            print(id_giver_request, id_receiver_request)
             id_giver = self.user_analyzer(id_giver_request)
             id_receiver = self.user_analyzer(id_receiver_request)
             if all((id_receiver, id_giver)):
@@ -113,12 +114,18 @@ class Control:
                     if balance_giver >= amount:
                         giver_request = get_request.giver_request(request, id_giver)
                         receiver_request = get_request.receiver_request(request, id_receiver)
-                        bank_account.process_request(receiver_request)
-                        bank_account.process_request(giver_request)
+                        if bank_account.process_request(receiver_request).get("status") == "success":
+                            bank_account.process_request(giver_request)
+                        else:
+                            print("Счет получателя не найден")
+                            return {"status": "failed"}
+                        return {"status": "success", "id_giver": id_giver, "id_receiver": id_receiver, "amount": amount}
                 else:
                     print(f"Недостаточно средств на вашем счету")
+                    return {"status": "failed"}
             else:
-                print(f"Счет получателя не найден")
+                print(f"Пользователя с таким номером не существует")
+                return {"status": "failed"}
 
 
 first_request = {

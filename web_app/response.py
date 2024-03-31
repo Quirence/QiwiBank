@@ -3,9 +3,10 @@ from http import cookies
 from urllib.parse import unquote_plus
 from Control.control import Control
 import time
-import json
 from views import *
+from logs.logs import *
 
+logs = Logs()
 control = Control()
 active_sessions = {}
 COOKIE_NAME = "session_id"
@@ -187,7 +188,7 @@ class ResponseGenerator:
         headers, code = ResponseGenerator.generate_headers(method, url, session_id)
         if (url == '/register' or url == '/login') and method == "POST":
             control_response = control.treatment_request(data)
-            print(control_response)
+            logs.add_log(data, control_response, active_sessions.get(session_id))
             if control_response is not None and control_response.get('status') == 'success':
                 user_email = control_response.get('email')
                 session_id = ResponseGenerator.generate_session_id()
@@ -197,13 +198,12 @@ class ResponseGenerator:
         session = active_sessions.get(session_id)
         balance = "Счет не существует"
         if (url != "/register" and url != "/login") and method == "POST":
+            control_response = control.treatment_request(data, session)
             if data.get("method") == "Getbalance":
-                control_response = control.treatment_request(data, session)
                 balance = control_response.get("balance")
                 if balance is None:
                     balance = "Счет не существует"
-            else:
-                control.treatment_request(data, session)
+            logs.add_log(data, control_response, active_sessions.get(session_id))
         if url == '/balance':
             response_body = f"<p>{balance}</p>"
         else:

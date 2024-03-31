@@ -11,7 +11,7 @@ class MethodDeposit:
                 return method(request, cursor, conn)
             except AttributeError:
                 print(f"Unsupported request type: {request_type}")
-                return False
+                return {"status": "failed"}
 
     class OpenAccount:
         def __call__(self, request, cursor, conn):
@@ -21,6 +21,7 @@ class MethodDeposit:
             account = cursor.fetchone()
             if account:
                 print(f"Аккаунт с идентификационным номером {IdentificationAccount} уже существует.")
+                return {"status": "failed"}
             else:
                 BIC = request['BIC']
                 StatusDeposit = request.get('StatusDeposit', 'DEFAULT')
@@ -34,6 +35,7 @@ class MethodDeposit:
                                 TimeClose))
                 conn.commit()
                 print(f"Счет {IdentificationAccount} успешно открыт.")
+                return {"status": "success"}
 
     class CloseAccount:
         def __call__(self, request, cursor, conn):
@@ -47,10 +49,13 @@ class MethodDeposit:
                                    (IdentificationAccount,))
                     conn.commit()
                     print(f"Счет {IdentificationAccount} успешно закрыт.")
+                    return {"status": "success"}
                 else:
                     print(f"Счет {IdentificationAccount} не найден.")
+                    return {"status": "failed"}
             else:
                 print('Депозит должен быть деактивирован, чтобы его возможно было закрыть.')
+                return {"status": "failed"}
 
     class GetMoney:
         def __call__(self, request, cursor, conn):
@@ -64,10 +69,10 @@ class MethodDeposit:
                                (Money, IdentificationAccount))
                 conn.commit()
                 print(f"Сумма {Money} успешно зачислена на счет {IdentificationAccount}.")
-                return True
+                return {"status": "success"}
             else:
                 print(f"Счет {IdentificationAccount} не найден.")
-                return False
+                return {"status": "failed"}
 
     class GiveMoney:
         def __call__(self, request, cursor, conn):
@@ -84,17 +89,17 @@ class MethodDeposit:
                                        (Money, IdentificationAccount))
                         conn.commit()
                         print(f"Сумма {Money} успешно списана со счета {IdentificationAccount}.")
-                        return True
+                        return {"status": "success"}
                     else:
                         print(f"Недостаточно средств на счете {IdentificationAccount}.")
-                        return False
+                        return {"status": "failed"}
                 else:
                     print(
                         f"Списание средств с депозита {IdentificationAccount} невозможно, так как статус депозита: {StatusDeposit}.")
-                    return False
+                    return {"status": "failed"}
             else:
                 print(f"Счет {IdentificationAccount} не найден.")
-                return False
+                return {"status": "failed"}
 
     class SetOn:
         def __call__(self, request, cursor, conn):
@@ -175,4 +180,3 @@ class MethodDeposit:
                 return int(money[0])
             else:
                 return None
-
