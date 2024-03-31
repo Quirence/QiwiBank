@@ -1,4 +1,5 @@
 class Requests:
+
     def id_user_request(self, session):
         email = session["email"]
         return {"email": email, "request": "GetID"}
@@ -17,8 +18,10 @@ class Requests:
                 'CreditLimit': 5000,
                 'PayTime': 5,
                 'TimeClose': 10,
-                'StatusDeposit': 'ON'
+                'StatusDeposit': 'ON',
+                'Percent': request["Percent"]
             }
+
 
     def close_request(self, request, id_user):
         return {
@@ -55,4 +58,16 @@ class Requests:
             'request': 'GetMoney',
             'IdentificationAccount': id_receiver,
             'Money': request["amount"]
+        }
+
+    def pay_credit_request(self):
+        return {
+                'kind_of_account': 'Credit',
+                'request': 'PayCredit'
+            }
+
+    def pay_deposit_request(self):
+        return {
+            'kind_of_account': 'Deposit',
+            'request': 'PayDeposit'
         }

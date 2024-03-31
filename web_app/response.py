@@ -1,4 +1,3 @@
-# response.py
 from http import cookies
 from urllib.parse import unquote_plus
 from Control.control import Control
@@ -56,7 +55,7 @@ POST_urls = {
 
 
 class ResponseGenerator:
-    @staticmethod
+
     def check_session_validity(session_id):
         if session_id in active_sessions:
             session_start_time = active_sessions[session_id]["start_time"]
@@ -64,11 +63,10 @@ class ResponseGenerator:
                 return True
         return False
 
-    @staticmethod
+
     def generate_session_id():
         return str(time.time())
 
-    @staticmethod
     def set_cookie_header(session_id):
         cookie = cookies.SimpleCookie()
         cookie[COOKIE_NAME] = session_id
@@ -76,14 +74,12 @@ class ResponseGenerator:
         cookie[COOKIE_NAME]["max-age"] = 3 * 3600  # expire after 3 hours
         return cookie.output(header="").strip()
 
-    @staticmethod
     def redirect_to(location, session_id, email=None):
         if email:
             return f"HTTP/1.1 302 Found\nLocation: {location}\nSet-Cookie: {ResponseGenerator.set_cookie_header(session_id)}\nSet-Cookie: email={email}\nContent-Type: text/html; charset=utf-8\n\n"
         else:
             return f"HTTP/1.1 302 Found\nLocation: {location}\nSet-Cookie: {ResponseGenerator.set_cookie_header(session_id)}\nContent-Type: text/html; charset=utf-8\n\n"
 
-    @staticmethod
     def redirect_main(session_id, email=None):
         if ResponseGenerator.check_session_validity(session_id):
             # Пользователь авторизован, перенаправляем на /verif_main
@@ -94,7 +90,6 @@ class ResponseGenerator:
             new_location = "/main"
             return ResponseGenerator.redirect_to(new_location, session_id)
 
-    @staticmethod
     def generate_headers(method, url, session_id):
         if url not in URLS:
             return "HTTP/1.1 404 Not found\nContent-Type: text/html; charset=utf-8\n\n", 404
@@ -123,7 +118,6 @@ class ResponseGenerator:
 
         return "HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n", 200
 
-    @staticmethod
     def parse_request(request):
         lines = request.split("\r\n")
         first_line_parts = lines[0].split(" ")
@@ -163,7 +157,6 @@ class ResponseGenerator:
                             data[unquote_plus(param)] = ""
         return method, url, headers, data
 
-    @staticmethod
     def generate_content(code, url):
         if code == 404:
             return "<h1>404</h1><p>Not found</p>"
@@ -171,7 +164,6 @@ class ResponseGenerator:
             return "<h1>405</h1><p>Method not allowed</p>"
         return URLS[url]()
 
-    @staticmethod
     def generate_result(request):
         method, url, headers, data = ResponseGenerator.parse_request(request)
         if method == "POST":
@@ -186,15 +178,23 @@ class ResponseGenerator:
                     user_email = active_sessions[session_id].get('email')
 
         headers, code = ResponseGenerator.generate_headers(method, url, session_id)
-        if (url == '/register' or url == '/login') and method == "POST":
+        if url == '/login' and method == "POST":
             control_response = control.treatment_request(data)
             logs.add_log(data, control_response, active_sessions.get(session_id))
             if control_response is not None and control_response.get('status') == 'success':
-                user_email = control_response.get('email')
+                user_email = data.get('email')
                 session_id = ResponseGenerator.generate_session_id()
                 new_location = "/verif_main"
                 headers = ResponseGenerator.redirect_to(new_location, session_id, user_email)
                 active_sessions[session_id] = {"start_time": time.time(), "email": user_email}
+        if url == '/register' and method == "POST":
+            control_response = control.treatment_request(data)
+            logs.add_log(data, control_response, active_sessions.get(session_id))
+            if control_response is not None and control_response.get('status') == 'success':
+                session_id = ResponseGenerator.generate_session_id()
+                new_location = "/main"
+                headers = ResponseGenerator.redirect_to(new_location, session_id)
+
         session = active_sessions.get(session_id)
         balance = "Счет не существует"
         if (url != "/register" and url != "/login") and method == "POST":
@@ -210,3 +210,7 @@ class ResponseGenerator:
             response_body = ResponseGenerator.generate_content(code, url)
         response = (headers + response_body).encode()
         return response
+
+    def auto_update(self):
+        control_instance = Control()
+        control_instance.start_payment_scheduler()

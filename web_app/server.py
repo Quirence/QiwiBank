@@ -16,6 +16,8 @@ def run():
         response = ResponseGenerator.generate_result(request.decode("UTF-8"))
         client_socket.sendall(response)
         client_socket.close()
+        #ResponseGenerator().auto_update()
+
 
 if __name__ == "__main__":
     run()

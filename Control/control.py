@@ -1,6 +1,8 @@
 from database.UserMethod import *
 from BankAccount.BankAccount import bank_account
 from Control.Requests import *
+import schedule
+import time
 
 get_request = Requests()
 
@@ -15,6 +17,13 @@ class Control:
         User.thread_local.cursor = self.user.cursor
         User.thread_local.conn = self.user.conn
         return self.control_analyzer(request, session)
+
+    def start_payment_scheduler(self):
+        schedule.every(1).minutes.do(self.PayCredit)
+        schedule.every(1).minutes.do(self.PayDeposit)
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
 
     class AnalyzeRequest:
         def __init__(self, user_analyzer):
@@ -126,6 +135,16 @@ class Control:
             else:
                 print(f"Пользователя с таким номером не существует")
                 return {"status": "failed"}
+
+    class PayCredit:
+        def __call__(self, request, session):
+            pay_credit_request = get_request.pay_credit_request()
+            bank_account.process_request(pay_credit_request)
+
+    class PayDeposit:
+        def __call__(self, request, session):
+            pay_deposit_request = get_request.pay_deposit_request()
+            bank_account.process_request(pay_deposit_request)
 
 
 first_request = {

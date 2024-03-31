@@ -28,7 +28,8 @@
         <strong>Условия депозита:</strong><br>
         <strong>Процентная ставка:</strong> 5%<br>
         <strong>Можно ли пополнять?</strong> Да<br>
-        <strong>Можно ли снимать?</strong> Нет
+        <strong>Можно ли снимать?</strong> Нет<br>
+        <strong>Срок депозита:</strong> 1 год
     </div>
     <form id="openAccountForm" method="POST" action="/deposit">
         <div class="form-group">
@@ -40,6 +41,12 @@
         <!-- Hidden field for method -->
         <input type="hidden" name="method" value="Openaccount">
         <input type="hidden" name="kind_of_account" value="Deposit">
+        <!-- End of hidden field -->
+        <!-- Hidden field for percent -->
+        <input type="hidden" name="Percent" value="5">
+        <!-- End of hidden field -->
+        <!-- Hidden field for TimeClose -->
+        <input type="hidden" name="TimeClose" value="31536000">
         <!-- End of hidden field -->
         <div class="form-group">
             <button type="submit" class="btn btn-primary btn-block" disabled id="openButton">Открыть счет</button>
@@ -59,3 +66,4 @@
 </script>
 </body>
 </html>
+

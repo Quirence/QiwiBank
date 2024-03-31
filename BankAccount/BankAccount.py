@@ -37,7 +37,7 @@ class BankAccount:
             self.cursor.execute('''CREATE TABLE IF NOT EXISTS debit_accounts
                                    (IdentificationAccount TEXT,
                                    Money REAL DEFAULT 0,
-                                   BIC TEXT DEFAULT AAA)''')
+                                   BIC TEXT DEFAULT 'AAA')''')
             self.conn.commit()
 
         def treatment_request(self, request):
@@ -60,7 +60,8 @@ class BankAccount:
                                    Rank TEXT DEFAULT 'AAA',
                                    TimeActive INTEGER DEFAULT (strftime('%s', 'now')),
                                    LastPayTime INTEGER DEFAULT (strftime('%s', 'now')),
-                                   PayTime INTEGER)''')
+                                   PayTime INTEGER,
+                                   Percent REAL DEFAULT 0)''')
             self.conn.commit()
 
         def treatment_request(self, request):
@@ -83,7 +84,8 @@ class BankAccount:
                                    TimeActive INTEGER DEFAULT (strftime('%s', 'now')),
                                    LastPayTime INTEGER DEFAULT (strftime('%s', 'now')),
                                    PayTime INTEGER DEFAULT 0,
-                                   TimeClose INTEGER DEFAULT 0)''')
+                                   TimeClose INTEGER DEFAULT 0,
+                                   Percent REAL DEFAULT 0)''')
             self.conn.commit()
 
         def treatment_request(self, request):
@@ -100,3 +102,4 @@ request = {
     'Money': 50,
     'BIC': 'ABC123'
 }
+

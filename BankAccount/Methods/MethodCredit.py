@@ -16,8 +16,7 @@ class MethodCredit:
     class OpenAccount:
         def __call__(self, request, cursor, conn):
             IdentificationAccount = request['IdentificationAccount']
-            cursor.execute("SELECT * FROM credit_accounts WHERE IdentificationAccount = ?",
-                           (IdentificationAccount,))
+            cursor.execute("SELECT * FROM credit_accounts WHERE IdentificationAccount = ?", (IdentificationAccount,))
             account = cursor.fetchone()
             if account:
                 print(f"Аккаунт с идентификационным номером {IdentificationAccount} уже существует.")
@@ -30,8 +29,10 @@ class MethodCredit:
                 TimeActive = request.get('TimeActive', datetime.now().strftime('%s'))
                 LastPayTime = request.get('LastPayTime', datetime.now().strftime('%s'))
                 PayTime = request.get('PayTime', 0)
-                cursor.execute("INSERT INTO credit_accounts VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                               (IdentificationAccount, Money, BIC, CreditLimit, Rank, TimeActive, LastPayTime, PayTime))
+                Percent = request.get('Percent', 0)  # Добавляем получение процента из запроса
+                cursor.execute("INSERT INTO credit_accounts VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                               (IdentificationAccount, Money, BIC, CreditLimit, Rank, TimeActive, LastPayTime, PayTime,
+                                Percent))
                 conn.commit()
                 print(f"Счет {IdentificationAccount} успешно открыт.")
                 return {"status": "success"}
@@ -98,25 +99,19 @@ class MethodCredit:
 
     class PayCredit:
         def __call__(self, request, cursor, conn):
-            IdentificationAccount = request['IdentificationAccount']
             cursor.execute(
-                "SELECT TimeActive,"
-                "LastPayTime,"
-                "PayTime,"
-                "Money FROM credit_accounts WHERE IdentificationAccount = ?",
-                (IdentificationAccount,))
-            account = cursor.fetchone()
-            if account:
-                TimeActive, LastPayTime, PayTime, Balance = account
-                current_time = int(datetime.now().strftime('%s'))
+                "SELECT IdentificationAccount, TimeActive, LastPayTime, PayTime, Money, Percent FROM credit_accounts")
+            accounts = cursor.fetchall()
+            current_time = int(datetime.now().strftime('%s'))
+            for account in accounts:
+                IdentificationAccount, TimeActive, LastPayTime, PayTime, Balance, Percent = account
                 if Balance < 0:
                     if int(current_time) - int(LastPayTime) >= int(PayTime):
-                        Money = request['Money']
-                        BIC = request['BIC']
+                        penalty_amount = -(abs(Balance) * Percent / 100)
                         get_money_request = {
                             'request': 'GetMoney',
                             'IdentificationAccount': IdentificationAccount,
-                            'Money': Money
+                            'Money': penalty_amount
                         }
                         MethodCredit.AnalyzeRequest()(get_money_request, cursor, conn)
                         cursor.execute("UPDATE credit_accounts SET LastPayTime = ? WHERE IdentificationAccount = ?",
@@ -125,11 +120,10 @@ class MethodCredit:
                         print(f"Время последнего зачисления для счета {IdentificationAccount} успешно обновлено.")
                     else:
                         print(
-                            f"Баланс счета {IdentificationAccount} отрицательный, но время для начисления пени еще не пришло.")
+                            f"Баланс счета {IdentificationAccount} отрицательный, "
+                            f"но время для начисления пени еще не пришло.")
                 else:
                     print(f"Баланс счета {IdentificationAccount} положительный, пени не начисляются.")
-            else:
-                print(f"Счет {IdentificationAccount} не найден.")
 
     class GetBalance:
         def __call__(self, request, cursor, conn):

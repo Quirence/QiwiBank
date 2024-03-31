@@ -16,8 +16,7 @@ class MethodDeposit:
     class OpenAccount:
         def __call__(self, request, cursor, conn):
             IdentificationAccount = request['IdentificationAccount']
-            cursor.execute("SELECT * FROM deposit_accounts WHERE IdentificationAccount = ?",
-                           (IdentificationAccount,))
+            cursor.execute("SELECT * FROM deposit_accounts WHERE IdentificationAccount = ?", (IdentificationAccount,))
             account = cursor.fetchone()
             if account:
                 print(f"Аккаунт с идентификационным номером {IdentificationAccount} уже существует.")
@@ -30,9 +29,10 @@ class MethodDeposit:
                 TimeActive = int(request.get('TimeActive', datetime.now().timestamp()))
                 LastPayTime = request.get('LastPayTime', datetime.now().strftime('%s'))
                 TimeClose = TimeActive + request.get('TimeClose', 0)
-                cursor.execute("INSERT INTO deposit_accounts VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                Percent = request.get('Percent', 0)
+                cursor.execute("INSERT INTO deposit_accounts VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                                (IdentificationAccount, Money, BIC, StatusDeposit, TimeActive, LastPayTime, PayTime,
-                                TimeClose))
+                                TimeClose, Percent))
                 conn.commit()
                 print(f"Счет {IdentificationAccount} успешно открыт.")
                 return {"status": "success"}
@@ -135,36 +135,31 @@ class MethodDeposit:
 
     class PayDeposit:
         def __call__(self, request, cursor, conn):
-            IdentificationAccount = request['IdentificationAccount']
             cursor.execute(
-                "SELECT TimeActive,"
+                "SELECT IdentificationAccount,"
+                "TimeActive,"
                 "LastPayTime,"
                 "PayTime,"
                 "TimeClose,"
-                "StatusDeposit FROM deposit_accounts WHERE IdentificationAccount = ?",
-                (IdentificationAccount,))
-            account = cursor.fetchone()
-            if account:
-                TimeActive, LastPayTime, PayTime, TimeClose, StatusDeposit = account
+                "StatusDeposit,"
+                "Money,"
+                "Percent FROM deposit_accounts")
+            accounts = cursor.fetchall()
+            current_time = int(datetime.now().strftime('%s'))
+            for account in accounts:
+                IdentificationAccount, TimeActive, LastPayTime, PayTime, TimeClose, StatusDeposit, Money, Percent = account
                 if StatusDeposit == 'ON':
-                    current_time = int(datetime.now().strftime('%s'))
                     if int(current_time) - int(LastPayTime) >= int(PayTime):
-                        Money = request['Money']
-                        BIC = request['BIC']
-                        get_money_request = {
-                            'request': 'GetMoney',
-                            'IdentificationAccount': IdentificationAccount,
-                            'Money': Money
-                        }
-                        MethodDeposit.AnalyzeRequest()(get_money_request, cursor, conn)
-                        cursor.execute("UPDATE deposit_accounts SET LastPayTime = ? WHERE IdentificationAccount = ?",
-                                       (current_time, IdentificationAccount,))
+                        new_balance = Money * Percent / 100 + Money
+                        cursor.execute(
+                            "UPDATE deposit_accounts SET Money = ?, LastPayTime = ? WHERE IdentificationAccount = ?",
+                            (new_balance, current_time, IdentificationAccount))
                         conn.commit()
-                        print(f"Время последнего зачисления для счета {IdentificationAccount} успешно обновлено.")
+                        print(f"Счет {IdentificationAccount} успешно оплачен. Новый баланс: {new_balance}")
                     if current_time > TimeClose:
                         set_off_request = {'request': 'SetOff', 'IdentificationAccount': IdentificationAccount}
                         MethodDeposit.AnalyzeRequest()(set_off_request, cursor, conn)
-                        print(f"Ваш депозитный счет успешно закрыт")
+                        print(f"Ваш депозитный счет {IdentificationAccount} успешно закрыт")
                 else:
                     print(f"Депозит {IdentificationAccount} не активен.")
             else:
